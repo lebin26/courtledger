@@ -1,59 +1,12 @@
-# OmniBox Architecture Documentation (`docs/ARCHITECTURE.md`)
+# Court Ledger 架构设计 (Offline Architecture)
 
-## 1. Project Overview & Positioning
-**OmniBox** is a lightweight, zero-build, modular multi-app productivity platform designed to host utility tools with instant access, responsive dark/light theme support, and offline-first data resilience.
+## 1. 架构目标
+- **100% 纯离线**：打开浏览器即用，无需任何云端 API、数据库或服务端环境。
+- **零依赖与零构建 (Zero-Build)**：采用标准原生 ES 与语义化 HTML5/CSS3，免除任何打包、构建与编译摩擦。
+- **纯本地数据持久化**：球场预设数据集通过 `venues.csv` 格式定义并保存在客户端 `localStorage` 中。
 
-- **Platform Container**: **OmniBox Hub**
-- **Sub-App #1**: **Court Ledger** (🏸 羽毛球活动 AA 场费测算、用球平摊、球场数据管理与历史账单)
-- **Sub-App #2**: **Financial Overview** (💰 月度财务总览、资产配置、多币种换算与跨月走势对比矩阵)
-
----
-
-## 2. Technical Stack
-
-| Tier | Technology / Service | Role & Responsibility |
-| :--- | :--- | :--- |
-| **Frontend** | Vanilla HTML5, Vanilla CSS, ES6 Modules | Zero-build single-page web app, DOM state controllers, Canvas charts |
-| **API Layer** | Cloudflare Worker (`worker/src/index.js`, `financial.js`) | Serverless API routing, CORS handling, D1 database execution, and Workers Assets static hosting |
-| **Database** | Cloudflare D1 (SQLite Engine) | Serverless relational DB storing venues, bills, platforms, products, and monthly snapshots |
-| **Hosting** | Cloudflare Workers Assets / Pages | Global edge static file and API serving |
-
----
-
-## 3. Data Flow Architecture
-
-```text
-+-----------------------------------+
-|         Frontend User UI          |
-| (Vanilla JS + LocalStorage Hybrid)|
-+-----------------+-----------------+
-                  |
-        HTTP Fetch Request (/api/...)
-                  |
-                  v
-+-----------------------------------+
-|         Cloudflare Worker         |
-|       (worker/src/index.js)       |
-+-----------------+-----------------+
-                  |
-             env.DB (D1)
-                  |
-                  v
-+-----------------------------------+
-|           Cloudflare D1           |
-|        (SQLite SQL Engine)        |
-+-----------------------------------+
-```
-
-### Local Development Flow:
-- Run `npm run dev` (starts `wrangler dev` inside `worker/`).
-- Serves both frontend static assets and `/api/*` on `http://127.0.0.1:8787` seamlessly without CORS or proxy friction.
-
----
-
-## 4. Environment & Database Isolation
-
-| Environment | Frontend URL | Worker API | Database |
-| :--- | :--- | :--- | :--- |
-| **Local (Dev)** | `http://127.0.0.1:8787` | `http://127.0.0.1:8787` | Local SQLite in `.wrangler/state/v3/d1/` |
-| **Production** | Cloudflare Pages / Workers URL | Cloudflare Workers Edge | Cloudflare D1 (`host-calculator-db`) |
+## 2. 模块划分
+- **Calculator Engine (`frontend/js/courtledger/calculator.js`)**：纯函数式计算核心，独立测试、无任何 DOM 耦合。
+- **Domain State (`frontend/js/courtledger/state.js`)**：CSV 数据解析、本地球场缓存读取与写入。
+- **UI Controller (`frontend/js/courtledger/ui.js`)**：DOM 事件监听、滑动条交互、数值更新与剪贴板导出。
+- **Core Modules (`frontend/js/core/`)**：深浅色主题切换 (`theme.js`) 与移动端抽屉选择器 (`drawer.js`)。

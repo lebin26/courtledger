@@ -1,6 +1,6 @@
 /**
- * Court Ledger - Main Entry Point
- * Bootstraps router, theme, drawer, domain state, calculator UI, swipe gesture, bill copier, QR overlay, and smart roster.
+ * Court Ledger - Main Entry Point (100% Offline Calculator)
+ * Bootstraps theme, bottom drawer, domain state (CSV), calculator UI, and local venue manager.
  */
 
 // Global Toast Utility
@@ -23,53 +23,41 @@ window.showToast = function (message, duration = 2200) {
   }, duration);
 };
 
-document.addEventListener('DOMContentLoaded', async () => {
-  // 1. Initialize Core Router
-  if (window.AppRouter) {
-    window.AppRouter.initRouter();
-  }
-
-  // 2. Initialize Drawer Modal
+document.addEventListener('DOMContentLoaded', () => {
+  // 1. Initialize Drawer Modal (for players and shuttles selection)
   if (window.AppDrawer) {
     window.AppDrawer.initDrawer();
   }
 
-  // 3. Initialize Theme & Settings
+  // 2. Initialize Theme & Settings
   if (window.AppTheme) {
     window.AppTheme.initTheme();
   }
 
-  // 4. Initialize UI Event Controls & Calculation Engine
+  // 3. Initialize UI Event Controls & Calculation Engine
   let uiController = null;
   if (window.CourtLedgerUI) {
     uiController = window.CourtLedgerUI.initCourtLedgerUI();
   }
 
-  // 5. Initialize Venue Database State
+  // 4. Initialize Venue Database State (from CSV & LocalStorage)
   if (window.CourtLedgerState) {
     window.CourtLedgerState.initVenueState(() => {
-      if (window.CourtLedgerUI && typeof window.CourtLedgerUI.calculate === 'function') {
-        window.CourtLedgerUI.calculate();
-      } else if (uiController && typeof uiController.calculate === 'function') {
+      if (uiController && typeof uiController.calculate === 'function') {
         uiController.calculate();
       }
     });
   }
 
-  // 6. Initialize Settings Menu Dropdown & Quick Actions
+  // 5. Initialize Header Dropdown Menu
   bindSettingsMenu();
 
-  // 7. Initialize Financial Overview (Sub-App #2) Modals
-  if (window.FinancialUI) {
-    window.FinancialUI.bindModals();
-  }
-
-  console.log('📦 OmniBox initialized successfully! (Sub-Apps: Court Ledger, Financial Overview)');
+  console.log('🏸 Court Ledger Offline Calculator initialized successfully!');
 });
 
 function bindSettingsMenu() {
-  const settingsBtn = document.getElementById('courtledger-settings-btn') || document.getElementById('settings-btn');
-  const settingsDropdown = document.getElementById('courtledger-settings-dropdown') || document.getElementById('settings-dropdown');
+  const settingsBtn = document.getElementById('courtledger-settings-btn');
+  const settingsDropdown = document.getElementById('courtledger-settings-dropdown');
 
   if (settingsBtn && settingsDropdown) {
     settingsBtn.addEventListener('click', (e) => {
@@ -88,31 +76,14 @@ function bindSettingsMenu() {
     });
   }
 
-  // Menu items: Manage Venues
+  // Menu item: Manage Venues
   const menuManageVenues = document.getElementById('menu-manage-venues');
   if (menuManageVenues) {
     menuManageVenues.addEventListener('click', () => {
       if (settingsDropdown) settingsDropdown.classList.add('hidden');
       if (settingsBtn) settingsBtn.classList.remove('active');
-      const manageModal = document.getElementById('court-manage-modal');
-      if (manageModal) {
-        manageModal.classList.remove('hidden');
-        document.body.classList.add('modal-open');
-        if (window.CourtLedgerUI && typeof window.CourtLedgerUI.renderModalVenuesList === 'function') {
-          window.CourtLedgerUI.renderModalVenuesList();
-        }
-      }
-    });
-  }
-
-  // Menu items: History Bills
-  const menuHistoryBills = document.getElementById('menu-history-bills');
-  if (menuHistoryBills) {
-    menuHistoryBills.addEventListener('click', () => {
-      if (settingsDropdown) settingsDropdown.classList.add('hidden');
-      if (settingsBtn) settingsBtn.classList.remove('active');
-      if (window.AppRouter) {
-        window.AppRouter.switchView('historybills');
+      if (typeof window.openVenueManageModal === 'function') {
+        window.openVenueManageModal();
       }
     });
   }

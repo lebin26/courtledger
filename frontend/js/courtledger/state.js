@@ -1,15 +1,44 @@
 /**
- * Court Ledger - Domain State Module
- * Manages venue pricing dataset (Cloudflare D1 Database API) and selected venue state.
+ * Court Ledger - Domain State Module (100% Pure Offline with CSV Support)
+ * Manages venue pricing dataset loaded from venues.csv and persisted in localStorage.
  */
 
 (function () {
-  const DEFAULT_VENUES = [
-    { id: 1, name: 'Lavana Sport Center Setapak', rateMorning: 14.84, rateEvening: 29.68 },
-    { id: 2, name: 'Setapak Badminton Center (SBC)', rateMorning: 14.00, rateEvening: 28.00 },
-    { id: 12, name: 'TARUMT Sport Complex', rateMorning: 0.00, rateEvening: 0.00 }
-  ];
-  const LOCAL_VENUES_KEY = 'courtledger_cached_venues';
+  const DEFAULT_CSV = `场地名称,早场价格(RM/h),晚场价格(RM/h)
+Lavana Sport Center Setapak,14.84,29.68
+Setapak Badminton Center (SBC),14.00,28.00
+TARUMT Sport Complex,0.00,0.00`;
+
+  const LOCAL_VENUES_KEY = 'courtledger_offline_venues';
+
+  function parseCSV(text) {
+    if (!text || typeof text !== 'string') return [];
+    const lines = text.trim().split(/\r?\n/);
+    const parsed = [];
+    let idCounter = 1;
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (!line || line.startsWith('#') || line.startsWith('场地名称') || line.toLowerCase().startsWith('venue')) {
+        continue;
+      }
+      const parts = line.split(',');
+      if (parts.length >= 3) {
+        const name = parts[0].trim();
+        const rateMorning = parseFloat(parts[1]) || 0;
+        const rateEvening = parseFloat(parts[2]) || 0;
+        if (name) {
+          parsed.push({
+            id: idCounter++,
+            name,
+            rateMorning,
+            rateEvening
+          });
+        }
+      }
+    }
+    return parsed;
+  }
 
   function getCachedVenues() {
     try {
@@ -17,50 +46,35 @@
       if (raw) {
         const list = JSON.parse(raw);
         if (Array.isArray(list) && list.length > 0) {
-          const hasMock = list.some(v => v.name && (v.name.includes('Sentul') || v.name.includes('Pro One') || v.name.includes('标准场地 (默认)')));
-          if (!hasMock) return list;
+          return list;
         }
       }
-    } catch (e) {}
-    return [...DEFAULT_VENUES];
+    } catch (e) {
+      console.warn('Failed to read venues from localStorage:', e);
+    }
+    return parseCSV(DEFAULT_CSV);
   }
 
   function saveCachedVenues(list) {
     try {
       localStorage.setItem(LOCAL_VENUES_KEY, JSON.stringify(list));
-    } catch (e) {}
+    } catch (e) {
+      console.warn('Failed to save venues to localStorage:', e);
+    }
   }
 
   let venues = getCachedVenues();
-
   let selectedVenueIndex = 0;
   let rateMorning = 14.84;
   let rateEvening = 29.68;
-
   let onVenueChangeCallback = null;
 
-  function getApiBaseUrl() {
-    if (window.WORKER_API_URL) return window.WORKER_API_URL.replace(/\/$/, '');
-
-    // Auto-detect local testing or Cloudflare Workers same-origin deployment
-    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-      return 'http://127.0.0.1:8787';
-    }
-
-    if (window.location.hostname.endsWith('workers.dev') || window.location.hostname.endsWith('pages.dev')) {
-      return '';
-    }
-
-    // Default production Cloudflare Worker API endpoint fallback (e.g. for GitHub Pages)
-    return 'https://hostcalculator-worker.lebin2626.workers.dev';
-  }
-
   function getActiveRates() {
-    const v = venues[selectedVenueIndex] || venues[0] || DEFAULT_VENUES[0];
+    const v = venues[selectedVenueIndex] || venues[0] || { name: '标准场地', rateMorning: 14.84, rateEvening: 29.68 };
     return {
-      venueName: v ? v.name : '标准场地',
-      rateMorning: v ? (typeof v.rateMorning === 'number' ? v.rateMorning : (parseFloat(v.rateMorning) || 14.84)) : 14.84,
-      rateEvening: v ? (typeof v.rateEvening === 'number' ? v.rateEvening : (parseFloat(v.rateEvening) || 29.68)) : 29.68
+      venueName: v.name,
+      rateMorning: typeof v.rateMorning === 'number' ? v.rateMorning : (parseFloat(v.rateMorning) || 14.84),
+      rateEvening: typeof v.rateEvening === 'number' ? v.rateEvening : (parseFloat(v.rateEvening) || 29.68)
     };
   }
 
@@ -98,293 +112,98 @@
     updateActiveVenueRates();
   }
 
-  async function fetchVenuesFromDatabase() {
+  async function loadVenuesFromCSVFile() {
     try {
-      const endpoint = getApiBaseUrl() + '/api/venues';
-      const response = await fetch(endpoint);
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-      const data = await response.json();
-      if (data && Array.isArray(data.venues) && data.venues.length > 0) {
-        venues = data.venues;
-        saveCachedVenues(venues);
-        populateVenueSelect();
-        return venues;
+      // If user hasn't explicitly customized yet, attempt to fetch venues.csv
+      if (!localStorage.getItem(LOCAL_VENUES_KEY)) {
+        const response = await fetch('venues.csv');
+        if (response.ok) {
+          const csvText = await response.text();
+          const parsed = parseCSV(csvText);
+          if (parsed.length > 0) {
+            venues = parsed;
+            saveCachedVenues(venues);
+          }
+        }
       }
-    } catch (err) {
-      console.warn('⚠️ Cloudflare Worker / D1 Database API unavailable, using cached venues:', err.message);
+    } catch (e) {
+      // Offline file protocol or network error; fallback to cached or DEFAULT_CSV
+      console.log('venues.csv fetch skipped/offline fallback active');
     }
-    if (!venues || venues.length === 0) {
-      venues = getCachedVenues();
-      populateVenueSelect();
-    }
-    return venues;
-  }
-
-  async function fetchVenues() {
-    return await fetchVenuesFromDatabase();
-  }
-
-  async function initVenueState(onChange) {
-    onVenueChangeCallback = onChange;
-    const venueSelect = document.getElementById('venue-select');
-
     populateVenueSelect();
+  }
 
-    // Fetch venues and bills directly from Cloudflare D1 Database API & local storage
-    await fetchVenuesFromDatabase();
-    await fetchBills();
-
+  function initVenueState(onChangeCb) {
+    onVenueChangeCallback = onChangeCb;
+    const venueSelect = document.getElementById('venue-select');
     if (venueSelect) {
-      venueSelect.addEventListener('change', () => {
-        const idx = parseInt(venueSelect.value);
-        if (!isNaN(idx) && idx >= 0 && idx < venues.length) {
-          selectedVenueIndex = idx;
-          localStorage.setItem('selected-venue-index', idx);
-          updateActiveVenueRates();
-        }
+      venueSelect.addEventListener('change', (e) => {
+        selectedVenueIndex = parseInt(e.target.value) || 0;
+        localStorage.setItem('selected-venue-index', selectedVenueIndex);
+        updateActiveVenueRates();
       });
     }
+    loadVenuesFromCSVFile();
   }
 
-  // Database CRUD Actions (Cloudflare D1 / Worker API)
-
-  async function addVenue(name, rateMorning, rateEvening) {
-    try {
-      const endpoint = getApiBaseUrl() + '/api/venues';
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, rateMorning, rateEvening })
-      });
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error || '添加球场失败');
-      
-      await fetchVenuesFromDatabase();
-      selectedVenueIndex = venues.length - 1;
-      localStorage.setItem('selected-venue-index', selectedVenueIndex);
-      populateVenueSelect();
-      return data;
-    } catch (err) {
-      const localId = Date.now();
-      const newVenue = {
-        id: localId,
-        name: name.trim(),
-        rateMorning: parseFloat(rateMorning),
-        rateEvening: parseFloat(rateEvening)
-      };
-      venues.push(newVenue);
-      saveCachedVenues(venues);
-      selectedVenueIndex = venues.length - 1;
-      populateVenueSelect();
-      return { venue: newVenue, warning: '已保存在当前会话（离线模式）' };
-    }
+  function addVenue(name, rMorning, rEvening) {
+    const newId = venues.reduce((max, v) => Math.max(max, v.id || 0), 0) + 1;
+    const newVenue = {
+      id: newId,
+      name: name.trim(),
+      rateMorning: parseFloat(rMorning) || 0,
+      rateEvening: parseFloat(rEvening) || 0
+    };
+    venues.push(newVenue);
+    saveCachedVenues(venues);
+    populateVenueSelect();
+    return newVenue;
   }
 
-  async function updateVenue(id, name, rateMorning, rateEvening) {
-    try {
-      const endpoint = getApiBaseUrl() + `/api/venues/${id}`;
-      const response = await fetch(endpoint, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, rateMorning, rateEvening })
-      });
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error || '更新球场失败');
-
-      await fetchVenuesFromDatabase();
-      populateVenueSelect();
-      return data;
-    } catch (err) {
-      const idx = venues.findIndex(v => v.id === id);
-      if (idx !== -1) {
-        venues[idx].name = name.trim();
-        venues[idx].rateMorning = parseFloat(rateMorning);
-        venues[idx].rateEvening = parseFloat(rateEvening);
-        saveCachedVenues(venues);
-        populateVenueSelect();
-      }
-      return { warning: '已在本地更新（离线模式）' };
-    }
-  }
-
-  async function deleteVenue(id) {
-    try {
-      const endpoint = getApiBaseUrl() + `/api/venues/${id}`;
-      const response = await fetch(endpoint, {
-        method: 'DELETE'
-      });
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error || '删除球场失败');
-
-      await fetchVenuesFromDatabase();
-      selectedVenueIndex = 0;
-      populateVenueSelect();
-      return data;
-    } catch (err) {
-      venues = venues.filter(v => v.id !== id);
-      saveCachedVenues(venues);
-      selectedVenueIndex = 0;
-      populateVenueSelect();
-      return { warning: '已在本地删除（离线模式）' };
-    }
-  }
-
-  let savedBills = [];
-
-  function getUserBillsKey() {
-    return 'courtledger_saved_bills';
-  }
-
-  function getLocalBills() {
-    try {
-      const raw = localStorage.getItem(getUserBillsKey());
-      if (raw) {
-        const list = JSON.parse(raw);
-        if (Array.isArray(list)) return list;
-      }
-    } catch (e) {}
-    return [];
-  }
-
-  function saveLocalBills(list) {
-    try {
-      localStorage.setItem(getUserBillsKey(), JSON.stringify(list));
-    } catch (e) {}
-  }
-
-  function getAuthHeaderObj() {
-    return { 'Content-Type': 'application/json' };
-  }
-
-  async function fetchBills() {
-    let apiBills = [];
-    try {
-      const endpoint = getApiBaseUrl() + '/api/bills';
-      const response = await fetch(endpoint, {
-        headers: getAuthHeaderObj()
-      });
-      if (response.ok) {
-        const data = await response.json();
-        if (data && Array.isArray(data.bills)) {
-          apiBills = data.bills;
-        }
-      }
-    } catch (err) {
-      console.warn('⚠️ Cloudflare Worker API bills fetch failed, using local storage:', err.message);
-    }
-
-    const localBills = getLocalBills();
-    const billMap = new Map();
-
-    localBills.forEach((b, idx) => {
-      if (b) {
-        const idKey = (b.id !== undefined && b.id !== null && String(b.id).trim() !== '') ? String(b.id) : `local_${idx}_${Date.now()}`;
-        if (!b.id) b.id = idKey;
-        billMap.set(idKey, b);
-      }
-    });
-
-    apiBills.forEach((b, idx) => {
-      if (b) {
-        const idKey = (b.id !== undefined && b.id !== null && String(b.id).trim() !== '') ? String(b.id) : `api_${idx}_${Date.now()}`;
-        if (!b.id) b.id = idKey;
-        billMap.set(idKey, b);
-      }
-    });
-
-    savedBills = Array.from(billMap.values());
-    savedBills.sort((a, b) => {
-      const tA = a.createdAt ? new Date(String(a.createdAt).replace(' ', 'T')).getTime() : 0;
-      const tB = b.createdAt ? new Date(String(b.createdAt).replace(' ', 'T')).getTime() : 0;
-      return tB - tA;
-    });
-
-    saveLocalBills(savedBills);
-    return savedBills;
-  }
-
-  async function saveBill(billData) {
-    let newBill = null;
-    try {
-      const endpoint = getApiBaseUrl() + '/api/bills';
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: getAuthHeaderObj(),
-        body: JSON.stringify(billData)
-      });
-      const data = await response.json();
-      if (response.ok && data.bill) {
-        newBill = data.bill;
-      }
-    } catch (err) {
-      console.warn('⚠️ Failed to save bill to Cloudflare Worker API, storing locally:', err.message);
-    }
-
-    if (!newBill) {
-      newBill = {
-        ...billData,
-        id: Date.now(),
-        userId: null,
-        createdAt: new Date().toISOString()
-      };
-    }
-
-    savedBills.unshift(newBill);
-    saveLocalBills(savedBills);
-    return newBill;
-  }
-
-  async function updateBill(id, billData) {
-    try {
-      const endpoint = getApiBaseUrl() + `/api/bills/${id}`;
-      await fetch(endpoint, {
-        method: 'PUT',
-        headers: getAuthHeaderObj(),
-        body: JSON.stringify(billData)
-      });
-    } catch (err) {
-      console.warn('⚠️ Update bill to worker failed, fallback to local storage:', err.message);
-    }
-
-    const idx = savedBills.findIndex(b => String(b.id) === String(id));
+  function updateVenue(id, name, rMorning, rEvening) {
+    const idx = venues.findIndex(v => v.id === id);
     if (idx !== -1) {
-      savedBills[idx] = { ...savedBills[idx], ...billData, updatedAt: new Date().toISOString() };
-      saveLocalBills(savedBills);
+      venues[idx].name = name.trim();
+      venues[idx].rateMorning = parseFloat(rMorning) || 0;
+      venues[idx].rateEvening = parseFloat(rEvening) || 0;
+      saveCachedVenues(venues);
+      populateVenueSelect();
+      return venues[idx];
     }
-    return true;
+    return null;
   }
 
-  async function deleteBill(id) {
-    try {
-      const endpoint = getApiBaseUrl() + `/api/bills/${id}`;
-      await fetch(endpoint, {
-        method: 'DELETE',
-        headers: getAuthHeaderObj()
-      });
-    } catch (err) {
-      console.warn('⚠️ Delete bill on worker failed, fallback to local storage:', err.message);
+  function deleteVenue(id) {
+    if (venues.length <= 1) {
+      throw new Error('至少保留一个球场预设');
     }
+    venues = venues.filter(v => v.id !== id);
+    if (selectedVenueIndex >= venues.length) {
+      selectedVenueIndex = 0;
+      localStorage.setItem('selected-venue-index', 0);
+    }
+    saveCachedVenues(venues);
+    populateVenueSelect();
+  }
 
-    savedBills = savedBills.filter(b => String(b.id) !== String(id));
-    saveLocalBills(savedBills);
-    return true;
+  function resetVenuesToDefault() {
+    venues = parseCSV(DEFAULT_CSV);
+    saveCachedVenues(venues);
+    selectedVenueIndex = 0;
+    localStorage.setItem('selected-venue-index', 0);
+    populateVenueSelect();
   }
 
   window.CourtLedgerState = {
-    get venues() { return venues; },
-    get savedBills() { return savedBills; },
+    parseCSV,
+    getVenues: () => [...venues],
+    initVenueState,
+    populateVenueSelect,
     getActiveRates,
     updateActiveVenueRates,
-    populateVenueSelect,
-    initVenueState,
-    fetchVenuesFromDatabase,
-    fetchVenues,
     addVenue,
     updateVenue,
     deleteVenue,
-    fetchBills,
-    saveBill,
-    updateBill,
-    deleteBill
+    resetVenuesToDefault
   };
 })();

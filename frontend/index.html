@@ -8,78 +8,68 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="format-detection" content="telephone=no">
-  <title>OmniBox | 效率工具箱</title>
-  <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+  <title>Court Ledger — 羽毛球 AA 算账计算器</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
 
-  <!-- Direct CSS Module Loading -->
+  <!-- Direct CSS Module Loading (Zero-Build) -->
   <link rel="stylesheet" href="css/variables.css">
   <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/hub.css">
   <link rel="stylesheet" href="css/courtledger.css">
-  <link rel="stylesheet" href="css/financial.css">
 </head>
 
 <body>
   <div class="app-container">
-    <!-- Top Bar with Navigation & Global Settings -->
-    <header class="tv-header">
+    <!-- Top Header Bar with Theme & Settings -->
+    <header class="tv-header" role="banner">
       <div class="tv-logo-area">
-        <button id="back-to-hub-btn" class="nav-back-btn hidden" title="返回主页">
-          <span class="btn-icon">←</span>
-          <span class="btn-text">OmniBox</span>
-        </button>
-        <span id="header-app-title" class="tv-title">OmniBox</span>
+        <span class="tv-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--accent);">
+            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          </svg>
+          <span>Court Ledger</span>
+          <span class="tv-title-badge">离线版</span>
+        </span>
       </div>
-      <div class="tv-header-actions" style="display:flex; align-items:center; gap:8px;">
-        <!-- 用户登录/个人资料组件 -->
-        <div id="header-auth-area"></div>
-
-        <!-- Hub 专属设置按钮 & 下拉菜单 -->
+      <div class="tv-header-actions">
+        <!-- Settings Button & Dropdown -->
         <div class="settings-container">
-          <button id="hub-settings-btn" class="tv-btn-settings" title="主页设置">
-            <span class="btn-icon">⚙️</span>
+          <button type="button" id="courtledger-settings-btn" class="tv-btn-settings" title="偏好与主题设置" aria-label="设置与主题">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
           </button>
-          <div id="hub-settings-dropdown" class="settings-dropdown hidden">
-            <div class="settings-section">
-              <div class="settings-section-title">显示主题</div>
-              <div class="theme-options">
-                <button class="theme-opt-btn" data-theme="dark">
-                  <span class="opt-icon">🌙</span>
-                  <span class="opt-text">深色</span>
-                </button>
-                <button class="theme-opt-btn" data-theme="light">
-                  <span class="opt-icon">☀️</span>
-                  <span class="opt-text">浅色</span>
-                </button>
-                <button class="theme-opt-btn" data-theme="system">
-                  <span class="opt-icon">💻</span>
-                  <span class="opt-text">跟随系统</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Court Ledger 设置按钮 & 下拉菜单 -->
-        <div class="settings-container">
-          <button id="courtledger-settings-btn" class="tv-btn-settings hidden" title="Court Ledger 设置">
-            <span class="btn-icon">⚙️</span>
-          </button>
-          <div id="courtledger-settings-dropdown" class="settings-dropdown hidden">
+          <div id="courtledger-settings-dropdown" class="settings-dropdown hidden" role="menu">
             <!-- Theme Selection -->
             <div class="settings-section">
               <div class="settings-section-title">显示主题</div>
               <div class="theme-options">
-                <button class="theme-opt-btn" data-theme="dark">
-                  <span class="opt-icon">🌙</span>
-                  <span class="opt-text">深色</span>
+                <button type="button" class="theme-opt-btn" data-theme="dark">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                  </svg>
+                  <span class="opt-text">深色模式</span>
                 </button>
-                <button class="theme-opt-btn" data-theme="light">
-                  <span class="opt-icon">☀️</span>
-                  <span class="opt-text">浅色</span>
+                <button type="button" class="theme-opt-btn" data-theme="light">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                  </svg>
+                  <span class="opt-text">浅色模式</span>
                 </button>
-                <button class="theme-opt-btn" data-theme="system">
-                  <span class="opt-icon">💻</span>
+                <button type="button" class="theme-opt-btn" data-theme="system">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                    <line x1="12" y1="17" x2="12" y2="21"></line>
+                  </svg>
                   <span class="opt-text">跟随系统</span>
                 </button>
               </div>
@@ -87,15 +77,15 @@
 
             <!-- Court Ledger Tools -->
             <div class="settings-section">
-              <div class="settings-section-title">Court Ledger 工具</div>
+              <div class="settings-section-title">场地管理</div>
               <div class="settings-menu-list">
                 <button type="button" class="settings-menu-item" id="menu-manage-venues">
-                  <span class="opt-icon">🏸</span>
-                  <span class="opt-text">球场数据库管理</span>
-                </button>
-                <button type="button" class="settings-menu-item" id="menu-history-bills">
-                  <span class="opt-icon">📜</span>
-                  <span class="opt-text">历史账单记录</span>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                    <line x1="3" y1="9" x2="21" y2="9"></line>
+                    <line x1="9" y1="21" x2="9" y2="9"></line>
+                  </svg>
+                  <span class="opt-text">球场数据管理</span>
                 </button>
               </div>
             </div>
@@ -105,115 +95,15 @@
     </header>
 
     <!-- Main Content Viewport -->
-    <main class="app-main-viewport">
+    <main class="app-main-viewport" role="main">
 
-      <!-- VIEW -1: AUTHENTICATION GATEWAY (LOGIN / REGISTER PAGE) -->
-      <div id="view-auth" class="app-view hidden">
-        <div class="auth-page-container">
-          <div class="auth-page-card">
-            <!-- Brand Area -->
-            <div class="auth-page-brand">
-              <div class="auth-brand-logo">🧰</div>
-              <h1 class="auth-brand-title">OmniBox</h1>
-              <p class="auth-brand-desc">个人全能效率工具箱 · 财务资产与账单管理中枢</p>
-            </div>
-
-            <!-- Tabs: 账号登录 / 新用户注册 -->
-            <div class="auth-page-tabs">
-              <button type="button" class="auth-page-tab active" id="auth-page-tab-login" onclick="Auth.switchPageTab('login')">
-                <span>🔑</span> <span>账号登录</span>
-              </button>
-              <button type="button" class="auth-page-tab" id="auth-page-tab-register" onclick="Auth.switchPageTab('register')">
-                <span>✨</span> <span>新用户注册</span>
-              </button>
-            </div>
-
-            <!-- Form -->
-            <form id="auth-page-form" data-mode="login">
-              <div class="input-group">
-                <label for="auth-page-user-input">用户名 / 邮箱 (Username or Email) *</label>
-                <div class="auth-input-wrapper">
-                  <span class="auth-input-icon">👤</span>
-                  <input type="text" id="auth-page-user-input" class="auth-page-input" placeholder="请输入用户名或邮箱" required autocomplete="username">
-                </div>
-              </div>
-
-              <div class="input-group hidden" id="auth-page-nick-group">
-                <label for="auth-page-nick-input">显示昵称 (Nickname)</label>
-                <div class="auth-input-wrapper">
-                  <span class="auth-input-icon">🏷️</span>
-                  <input type="text" id="auth-page-nick-input" class="auth-page-input" placeholder="在系统中展示的称呼 (留空同用户名)">
-                </div>
-              </div>
-
-              <div class="input-group">
-                <label for="auth-page-pass-input">登录密码 (Password) *</label>
-                <div class="auth-input-wrapper">
-                  <span class="auth-input-icon">🔒</span>
-                  <input type="password" id="auth-page-pass-input" class="auth-page-input" placeholder="请输入密码 (至少 6 位)" required autocomplete="current-password">
-                  <button type="button" class="auth-toggle-pass-btn" onclick="Auth.togglePasswordVisibility('auth-page-pass-input')">👁️</button>
-                </div>
-              </div>
-
-              <div style="margin-top: 20px;">
-                <button type="submit" class="auth-page-submit-btn" id="auth-page-submit-btn">
-                  <span>🚀</span> <span>立即登录进入系统</span>
-                </button>
-              </div>
-
-              <!-- Quick fill helper -->
-              <div class="auth-quick-fill-box" onclick="Auth.quickFillAdmin()">
-                <span>⚡ 点击快捷填入管理员账号: <strong>lebin2626@gmail.com</strong></span>
-              </div>
-            </form>
-
-            <div class="auth-page-footer">
-              <span>🔐 端到端加盐哈希加密 · 多租户数据独立隔离</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- VIEW 0: MAIN HUB / APP LAUNCHER -->
-      <div id="view-hub" class="app-view hidden">
-        <section class="shortcuts-grid" id="tool-grid">
-          <!-- Shortcut Card 1: Court Ledger (Sub-App #1) -->
-          <div class="shortcut-card shortcut-purple" id="hub-card-courtledger" data-target-view="courtledger">
-            <div class="shortcut-top">
-              <div class="shortcut-icon-circle">
-                <span class="shortcut-icon">🏸</span>
-              </div>
-              <span class="shortcut-pill-badge" id="hub-badge-courtledger">ACTIVE</span>
-            </div>
-            <div class="shortcut-bottom">
-              <h2 class="shortcut-title">Court Ledger</h2>
-              <span class="shortcut-subtitle">羽球 AA 场费测算与账单平摊</span>
-            </div>
-          </div>
-
-          <!-- Shortcut Card 2: Monthly Financial Overview (Sub-App #2) -->
-          <div class="shortcut-card shortcut-emerald" id="hub-card-financial" data-target-view="financial">
-            <div class="shortcut-top">
-              <div class="shortcut-icon-circle">
-                <span class="shortcut-icon">💰</span>
-              </div>
-              <span class="shortcut-pill-badge badge-soon" id="hub-badge-financial">NEW</span>
-            </div>
-            <div class="shortcut-bottom">
-              <h2 class="shortcut-title">Financial Overview</h2>
-              <span class="shortcut-subtitle">月度财务总览 · 资产配置与资金趋势</span>
-            </div>
-          </div>
-        </section>
-      </div>
-
-      <!-- VIEW 1: COURT LEDGER (SUB-APP #1) -->
-      <div id="view-courtledger" class="app-view hidden">
+      <!-- PURE OFFLINE CALCULATOR VIEW -->
+      <div id="view-courtledger" class="app-view active">
         <div class="calculator-card">
 
-          <!-- Mobile Only Ticker (Hidden on Desktop) -->
-          <section class="ticker-section mobile-only-ticker">
-            <div class="ticker-label">每人收费</div>
+          <!-- Mobile Only Ticker (Hero metric on Mobile) -->
+          <section class="ticker-section mobile-only-ticker" aria-live="polite">
+            <span class="ticker-label">每人收费</span>
             <div class="ticker-price-container">
               <span class="ticker-currency currency-unit">RM</span>
               <span id="player-fee-display" class="ticker-price player-fee-val">0.00</span>
@@ -222,7 +112,7 @@
 
           <div class="calc-main-layout">
             <!-- Left Column: Inputs Section -->
-            <section class="inputs-section">
+            <section class="inputs-section" aria-label="计算参数输入">
 
               <!-- 场地选择 & 场地费计算参数 -->
               <div class="court-fee-config-box">
@@ -231,14 +121,24 @@
                     <label for="venue-select">选择场地</label>
                     <div class="venue-header-actions">
                       <span id="venue-rate-badge" class="venue-rate-badge">加载中...</span>
-                      <button type="button" id="btn-manage-venues" class="btn-icon-link" title="数据库球场管理">⚙️ 管理球场</button>
+                      <button type="button" id="btn-manage-venues" class="btn-icon-link" title="球场数据管理">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <circle cx="12" cy="12" r="3"></circle>
+                          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                        </svg>
+                        <span>管理球场</span>
+                      </button>
                     </div>
                   </div>
                   <div class="input-wrapper select-wrapper">
-                    <select id="venue-select">
-                      <!-- 动态由 Cloudflare D1 数据库 API 加载 -->
+                    <select id="venue-select" aria-label="选择球场">
+                      <!-- 动态由 CSV / 本地存储加载 -->
                     </select>
-                    <span class="select-chevron">▼</span>
+                    <span class="select-chevron" aria-hidden="true">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                      </svg>
+                    </span>
                   </div>
                 </div>
 
@@ -272,39 +172,47 @@
                         <option value="22">10:00 PM</option>
                         <option value="23">11:00 PM</option>
                       </select>
-                      <span class="select-chevron">▼</span>
+                      <span class="select-chevron" aria-hidden="true">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                      </span>
                     </div>
                   </div>
 
                   <div class="input-group">
-                    <label>时长 (点击选择)</label>
-                    <div id="duration-trigger" class="picker-trigger duration-trigger-box">
+                    <label>活动时长 (点击展开)</label>
+                    <div id="duration-trigger" class="picker-trigger duration-trigger-box" tabindex="0" role="button" aria-expanded="false" aria-label="展开活动时长滑动条">
                       <span id="duration-display" class="picker-value">2 小时</span>
-                      <span class="picker-chevron">▼</span>
+                      <span class="picker-chevron" aria-hidden="true">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                      </span>
                     </div>
                   </div>
                 </div>
 
-                <div id="duration-slider-panel" class="slider-panel collapsed">
+                <div id="duration-slider-panel" class="slider-panel collapsed" aria-label="调整时长面板">
                   <div class="slider-header">
-                    <span>滑动调整时长</span>
+                    <span>滑动微调时长</span>
                     <span id="slider-val-bubble">2 小时</span>
                   </div>
                   <div class="slider-wrapper">
                     <span class="slider-boundary-label">1h</span>
-                    <input type="range" id="duration-slider" min="1" max="4" value="2" step="1">
+                    <input type="range" id="duration-slider" min="1" max="4" value="2" step="1" aria-label="时长滑块">
                     <span class="slider-boundary-label">4h</span>
                   </div>
                   <div id="time-range-display" class="time-range-banner">4:00 PM - 6:00 PM</div>
                 </div>
 
                 <div class="input-group">
-                  <label>场地数量 (可点击或滑动)</label>
-                  <div class="segmented-control" id="court-segmented-control">
+                  <label id="court-count-label">场地数量</label>
+                  <div class="segmented-control" id="court-segmented-control" role="radiogroup" aria-labelledby="court-count-label">
                     <input type="radio" name="court-count" id="court-1" value="1">
                     <label for="court-1">1 片</label>
 
-                    <input type="radio" name="court-count" id="court-2" value="2">
+                    <input type="radio" name="court-count" id="court-2" value="2" checked>
                     <label for="court-2">2 片</label>
 
                     <input type="radio" name="court-count" id="court-3" value="3">
@@ -312,13 +220,11 @@
 
                     <input type="radio" name="court-count" id="court-4" value="4">
                     <label for="court-4">4 片</label>
-
-                    <div class="segmented-slider-thumb"></div>
                   </div>
                 </div>
 
                 <div class="input-group court-fee-display-wrapper">
-                  <label>场地费 (自动计算)</label>
+                  <label for="court-fee">场地费 (自动换算)</label>
                   <div class="input-wrapper read-only-input">
                     <span class="input-prefix currency-unit">RM</span>
                     <input type="text" id="court-fee" value="0.00" readonly tabindex="-1">
@@ -327,20 +233,25 @@
                 </div>
               </div>
 
+              <!-- 人数与 Host 配置 -->
               <div class="input-row-2col">
                 <div class="input-group">
                   <label>参与总人数 (含Host)</label>
-                  <div id="players-picker" class="picker-trigger">
+                  <div id="players-picker" class="picker-trigger" tabindex="0" role="button" aria-haspopup="dialog" aria-label="选择参与总人数">
                     <span id="players-display" class="picker-value">6</span>
                     <span class="picker-suffix currency-unit">人</span>
-                    <span class="picker-chevron">▼</span>
+                    <span class="picker-chevron" aria-hidden="true">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                      </svg>
+                    </span>
                   </div>
                   <input type="hidden" id="total-players" value="6">
                 </div>
 
                 <div class="input-group">
-                  <label>Host 数量</label>
-                  <div class="host-selector-segmented">
+                  <label id="host-count-label">Host 数量 (免单)</label>
+                  <div class="host-selector-segmented" role="radiogroup" aria-labelledby="host-count-label">
                     <button type="button" class="host-opt-btn active" data-host="0">0 Host</button>
                     <button type="button" class="host-opt-btn" data-host="1">1 Host</button>
                     <button type="button" class="host-opt-btn" data-host="2">2 Host</button>
@@ -349,40 +260,52 @@
                 </div>
               </div>
 
+              <!-- 用球与价格配置 -->
               <div class="input-row-2col">
                 <div class="input-group">
-                  <label>用球数量 (真实用球)</label>
-                  <div id="shuttles-picker" class="picker-trigger">
+                  <label>用球数量 (真实消耗)</label>
+                  <div id="shuttles-picker" class="picker-trigger" tabindex="0" role="button" aria-haspopup="dialog" aria-label="选择用球数量">
                     <span id="shuttles-display" class="picker-value">3</span>
                     <span class="picker-suffix currency-unit">个</span>
-                    <span class="picker-chevron">▼</span>
+                    <span class="picker-chevron" aria-hidden="true">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                      </svg>
+                    </span>
                   </div>
                   <input type="hidden" id="shuttles-used" value="3">
                 </div>
                 <div class="input-group">
-                  <label for="shuttle-price">羽毛球价格 (桶)</label>
+                  <label for="shuttle-price">羽毛球价格 (每桶)</label>
                   <div class="input-wrapper">
                     <span class="input-prefix currency-unit">RM</span>
-                    <input type="number" id="shuttle-price" value="123.00" min="0" step="0.01" placeholder="0.00"
-                      inputmode="decimal">
+                    <input type="number" id="shuttle-price" value="123.00" min="0" step="0.01" placeholder="0.00" inputmode="decimal">
                   </div>
                 </div>
               </div>
 
+              <!-- 附加加球 -->
               <div class="input-group full-width-group">
                 <div class="label-row-between">
-                  <label>附加加球 (用于盈利或覆盖Host)</label>
-                  <span id="shuttle-info-tag" class="info-pill-tag">建议加 2 个球覆盖 Host</span>
+                  <label>附加加球 (覆盖 Host / 盈利)</label>
+                  <span id="shuttle-info-tag" class="info-pill-tag success-tag">无需加球覆盖 Host</span>
                 </div>
                 <div class="stepper-wrapper">
-                  <button type="button" id="add-shuttles-minus" class="stepper-btn"
-                    aria-label="减少附加球">&minus;</button>
+                  <button type="button" id="add-shuttles-minus" class="stepper-btn" aria-label="减少附加球">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                  </button>
                   <div class="stepper-value-group">
                     <span id="add-shuttles-display" class="stepper-value">0 个</span>
                     <span id="profit-shuttles-tag" class="profit-subtag">额外盈利: 0 个</span>
                   </div>
-                  <button type="button" id="add-shuttles-plus" class="stepper-btn"
-                    aria-label="增加附加球">&plus;</button>
+                  <button type="button" id="add-shuttles-plus" class="stepper-btn" aria-label="增加附加球">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                  </button>
                 </div>
                 <input type="hidden" id="additional-shuttles" value="0">
               </div>
@@ -390,10 +313,10 @@
             </section>
 
             <!-- Right Column: Studio Calculation Results Panel -->
-            <div class="studio-sidepanel" id="courtledger-sidepanel">
-              <!-- Desktop Sticky Ticker (Hidden on Mobile) -->
-              <div class="desktop-ticker-card">
-                <div class="ticker-label">每人收费 (实时平摊)</div>
+            <aside class="studio-sidepanel" id="courtledger-sidepanel" aria-label="费用计算结果明细">
+              <!-- Desktop Sticky Ticker (Hero metric on Desktop) -->
+              <div class="desktop-ticker-card" aria-live="polite">
+                <span class="ticker-label">每人收费 (实时平摊)</span>
                 <div class="ticker-price-container">
                   <span class="ticker-currency currency-unit">RM</span>
                   <span id="player-fee-display-desktop" class="ticker-price player-fee-val">0.00</span>
@@ -401,8 +324,9 @@
               </div>
 
               <section class="outputs-section">
+                <!-- Shuttle summary breakdown card -->
                 <div class="shuttle-summary-card">
-                  <div class="shuttle-summary-title">🏸 用球统计明细</div>
+                  <div class="shuttle-summary-title">用球统计明细</div>
                   <div class="shuttle-summary-grid">
                     <div class="shuttle-summary-item">
                       <span class="item-label">真实用球</span>
@@ -417,12 +341,13 @@
                       <span id="sum-profit-shuttles" class="item-val tag-green">0 个</span>
                     </div>
                     <div class="shuttle-summary-item">
-                      <span class="item-label">被计算总用球</span>
+                      <span class="item-label">被计算总球</span>
                       <span id="sum-billed-shuttles" class="item-val tag-accent">0 个</span>
                     </div>
                   </div>
                 </div>
 
+                <!-- Financial totals -->
                 <div class="summary-row">
                   <span class="summary-label">真实总成本</span>
                   <div class="summary-value-wrapper">
@@ -449,278 +374,25 @@
               </section>
 
               <!-- Calculation Action Buttons -->
-              <div class="cl-calc-actions" style="margin-top: 16px; display: flex; flex-direction: column; gap: 8px;">
-                <button type="button" id="btn-save-bill" class="btn-primary-action" style="width: 100%;">
-                  <span>💾</span> <span>保存账单记录</span>
-                </button>
-                <button type="button" id="btn-history-bill" class="btn-secondary-action" style="width: 100%; padding: 10px; border-radius: 12px; background: var(--surface-hover); border: 1px solid var(--border-subtle); color: var(--text-primary); cursor: pointer;" onclick="AppRouter.switchView('historybills')">
-                  <span>📜</span> <span>查看历史账单记录</span>
+              <div class="cl-calc-actions">
+                <button type="button" id="btn-copy-bill" class="btn-primary-action" style="width: 100%;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <span>复制账单明细</span>
                 </button>
               </div>
-            </div>
+            </aside>
 
-            <div id="error-banner" class="error-banner hidden">
-              <span class="error-icon">⚠️</span>
+            <!-- Error Banner -->
+            <div id="error-banner" class="error-banner hidden" role="alert">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
               <span class="error-msg">参与人数必须大于 Host人数！</span>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- VIEW 2: HISTORY BILLS DATABASE -->
-      <div id="view-historybills" class="app-view hidden">
-        <div class="calculator-card history-page-card">
-
-          <div class="history-page-header">
-            <div>
-              <h2 class="history-page-title">📊 AA 账单历史数据库</h2>
-              <span class="db-status-badge">⚡ Cloudflare D1 云端数据库 + 本地存储双同步</span>
-            </div>
-          </div>
-
-          <!-- Analytics KPI Summary Grid -->
-          <div class="kpi-dashboard-grid">
-            <div class="kpi-card">
-              <span class="kpi-label">📁 账单总条数</span>
-              <span id="kpi-total-bills" class="kpi-value">0 笔</span>
-            </div>
-            <div class="kpi-card">
-              <span class="kpi-label">💰 累计总收款</span>
-              <span id="kpi-total-revenue" class="kpi-value">RM 0.00</span>
-            </div>
-            <div class="kpi-card">
-              <span class="kpi-label">📈 累计净利润</span>
-              <span id="kpi-total-profit" class="kpi-value tag-bullish">RM 0.00</span>
-            </div>
-            <div class="kpi-card">
-              <span class="kpi-label">🏸 场均每人收费</span>
-              <span id="kpi-avg-player-fee" class="kpi-value tag-accent">RM 0.00</span>
-            </div>
-          </div>
-
-          <!-- Search and Filter Bar -->
-          <div class="bills-list-container">
-            <div class="bills-list-header">
-              <input type="text" id="bills-search-input" placeholder="🔍 搜索账单名称、球场或日期..." class="modal-input">
-              <select id="bills-date-filter" class="modal-select date-filter-select">
-                <option value="all">📅 全部时间范围</option>
-                <option value="7">📅 近 7 天账单</option>
-                <option value="30">📅 近 30 天账单</option>
-                <option value="90">📅 近 90 天账单</option>
-                <option value="365">📅 近 1 年账单</option>
-              </select>
-            </div>
-            <div id="modal-bills-list" class="modal-bills-list page-bills-list">
-              <!-- 动态渲染历史账单列表 -->
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- VIEW 3: MONTHLY FINANCIAL OVERVIEW (SUB-APP #2) -->
-      <div id="view-financial" class="app-view hidden">
-        <div class="financial-container">
-
-          <!-- Top Navigation & Month Selector Bar -->
-          <div class="fin-nav-bar">
-            <div class="fin-tabs-group">
-              <button type="button" class="fin-tab-btn active" data-tab="dashboard">
-                <span>📊</span> <span>资产看板</span>
-              </button>
-              <button type="button" class="fin-tab-btn" data-tab="monthly">
-                <span>📅</span> <span>月度录入</span>
-              </button>
-              <button type="button" class="fin-tab-btn" data-tab="platforms">
-                <span>🏛️</span> <span>平台管理</span>
-              </button>
-              <button type="button" class="fin-tab-btn" data-tab="products">
-                <span>🏷️</span> <span>产品管理</span>
-              </button>
-              <button type="button" class="fin-tab-btn" data-tab="analytics">
-                <span>📈</span> <span>多月对比</span>
-              </button>
-            </div>
-
-            <div class="fin-nav-right-tools">
-              <div class="fin-month-selector">
-                <button type="button" class="fin-month-btn" id="fin-prev-month-btn" title="上个月">◀</button>
-                <input type="month" id="fin-month-picker" class="fin-month-input" title="选择月份">
-                <button type="button" class="fin-month-btn" id="fin-next-month-btn" title="下个月">▶</button>
-              </div>
-              <button type="button" class="fin-btn-outline" id="fin-btn-open-backup" title="数据备份与恢复" onclick="FinancialUI.openBackupModal()">
-                <span>📦</span> <span>备份</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- TAB 1: DASHBOARD -->
-          <div id="fin-tab-dashboard" class="fin-tab-pane">
-            <!-- Dynamic Dashboard Container (Supports Actionable Empty State or Full Dashboard) -->
-            <div id="fin-dashboard-content-area">
-              <!-- KPI Summary Cards -->
-              <section class="fin-kpi-grid">
-                <div class="fin-kpi-card">
-                  <span class="fin-kpi-label">💰 当月净总资产 (Total Net Worth)</span>
-                  <div class="fin-kpi-val" id="fin-kpi-total-assets">
-                    <span class="unit">RM</span> <span class="val">0.00</span>
-                  </div>
-                  <div class="fin-kpi-sub" id="fin-kpi-mom-badge">
-                    <span>✨</span> <span>首月记录</span>
-                  </div>
-                </div>
-
-                <div class="fin-kpi-card">
-                  <span class="fin-kpi-label">📊 录入状态 & 覆盖率</span>
-                  <div class="fin-kpi-val" id="fin-kpi-reported-count">0 个产品已录入</div>
-                  <div class="fin-kpi-sub" style="color: #10b981;">
-                    <span>⚡</span> <span>Cloudflare D1 实时云端同步</span>
-                  </div>
-                </div>
-              </section>
-
-              <!-- Dashboard Balanced Grid -->
-              <div class="fin-dashboard-grid" style="margin-top: 20px;">
-                <!-- Left: Asset Trend Curve -->
-                <div class="fin-card">
-                  <div class="fin-card-header">
-                    <h3 class="fin-card-title">📈 资产历史走势 (Asset Trend)</h3>
-                  </div>
-                  <div class="fin-card-body">
-                    <div class="fin-chart-container">
-                      <canvas id="fin-asset-curve-canvas" class="fin-chart-canvas"></canvas>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Right: Platform Allocation -->
-                <div class="fin-card">
-                  <div class="fin-card-header">
-                    <h3 class="fin-card-title">🏛️ 各机构资金分布 (By Platform)</h3>
-                  </div>
-                  <div class="fin-card-body">
-                    <div class="fin-alloc-list" id="fin-platform-alloc-list">
-                      <!-- Dynamic platform bars -->
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Left 2: Product Type Allocation & Rebalancing Drift -->
-                <div class="fin-card">
-                  <div class="fin-card-header">
-                    <h3 class="fin-card-title">🏷️ 资产大类分布与偏离度 (By Category)</h3>
-                  </div>
-                  <div class="fin-card-body">
-                    <div class="fin-alloc-list" id="fin-prodtype-alloc-list">
-                      <!-- Dynamic product type bars -->
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Right 2: Currency Exposure (币种敞口分布) -->
-                <div class="fin-card">
-                  <div class="fin-card-header">
-                    <h3 class="fin-card-title">💱 币种敞口分布 (Currency Exposure)</h3>
-                  </div>
-                  <div class="fin-card-body">
-                    <div class="fin-alloc-list" id="fin-currency-alloc-list">
-                      <!-- Dynamic currency exposure items -->
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Card 5 (Full Width or Span): Top Movers -->
-                <div class="fin-card" style="grid-column: 1 / -1;">
-                  <div class="fin-card-header">
-                    <h3 class="fin-card-title">🚀 环比波动 Top 5 (MoM Changes)</h3>
-                  </div>
-                  <div class="fin-card-body">
-                    <div class="fin-movers-list" id="fin-top-movers-list">
-                      <!-- Dynamic top movers -->
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- TAB 2: MONTHLY DATA ENTRY -->
-          <div id="fin-tab-monthly" class="fin-tab-pane hidden">
-            <div class="fin-entry-header">
-              <div>
-                <h3 style="margin:0; font-size:1.2rem; color:var(--text-primary);">📝 月度余额快照录入</h3>
-                <span style="font-size:0.8rem; color:var(--text-muted);">录入各机构金融账户在月末的真实余额，支持外币汇率折算与 Tab/Enter 顺畅流转</span>
-              </div>
-              <div class="fin-entry-actions">
-                <button type="button" class="fin-btn-copy" id="fin-btn-copy-prev">
-                  <span>📋</span> <span>整月沿用上月</span>
-                </button>
-                <button type="button" class="fin-btn-save" id="fin-btn-save-month">
-                  <span>💾</span> <span>保存当月快照</span>
-                </button>
-              </div>
-            </div>
-
-            <!-- Grouped entry cards -->
-            <div id="fin-entry-groups-container">
-              <!-- Dynamic grouped rows -->
-            </div>
-          </div>
-
-          <!-- TAB 3: PLATFORMS MANAGEMENT -->
-          <div id="fin-tab-platforms" class="fin-tab-pane hidden">
-            <div class="fin-entry-header">
-              <div>
-                <h3 style="margin:0; font-size:1.2rem; color:var(--text-primary);">🏛️ 金融机构与平台管理</h3>
-                <span style="font-size:0.8rem; color:var(--text-muted);">维护您的银行、券商、交易所及电子钱包机构</span>
-              </div>
-              <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-                <button type="button" class="fin-btn-copy" onclick="FinancialUI.openTemplateMarketModal()">
-                  <span>✨</span> <span>预设模板库 / 快速导入</span>
-                </button>
-                <button type="button" class="fin-btn-save" onclick="FinancialUI.openPlatformModal()">
-                  <span>➕</span> <span>添加自建平台</span>
-                </button>
-              </div>
-            </div>
-            <div class="fin-master-grid" id="fin-platforms-grid">
-              <!-- Dynamic platform cards -->
-            </div>
-          </div>
-
-          <!-- TAB 4: PRODUCTS MANAGEMENT -->
-          <div id="fin-tab-products" class="fin-tab-pane hidden">
-            <div class="fin-entry-header">
-              <div>
-                <h3 style="margin:0; font-size:1.2rem; color:var(--text-primary);">🏷️ 金融产品与子账户管理</h3>
-                <span style="font-size:0.8rem; color:var(--text-muted);">维护各平台下的具体活期、定期、股票、理财或外币子账户</span>
-              </div>
-              <button type="button" class="fin-btn-save" onclick="FinancialUI.openProductModal()">
-                <span>➕</span> <span>添加产品</span>
-              </button>
-            </div>
-            <div class="fin-master-grid" id="fin-products-grid">
-              <!-- Dynamic product cards -->
-            </div>
-          </div>
-
-          <!-- TAB 5: ANALYTICS & MATRIX COMPARISON -->
-          <div id="fin-tab-analytics" class="fin-tab-pane hidden">
-            <div class="fin-entry-header">
-              <div>
-                <h3 style="margin:0; font-size:1.2rem; color:var(--text-primary);">📈 跨月度多期对比矩阵</h3>
-                <span style="font-size:0.8rem; color:var(--text-muted);">首列固定冻结，点击表头月份直达录入，支持多维透视与差异高亮</span>
-              </div>
-              <!-- Matrix View Mode Switcher -->
-              <div class="fin-mode-pills">
-                <button type="button" class="fin-mode-btn active" data-mode="amount" onclick="FinancialUI.setMatrixMode('amount')">💰 绝对金额</button>
-                <button type="button" class="fin-mode-btn" data-mode="diff" onclick="FinancialUI.setMatrixMode('diff')">📈 环比增减 (Δ)</button>
-                <button type="button" class="fin-mode-btn" data-mode="pct" onclick="FinancialUI.setMatrixMode('pct')">📊 资产占比 (%)</button>
-              </div>
-            </div>
-            <div class="fin-matrix-container" id="fin-matrix-table-container">
-              <!-- Dynamic Matrix Table -->
             </div>
           </div>
 
@@ -730,21 +402,26 @@
     </main>
   </div>
 
-  <!-- Modal: 球场 D1 数据库管理弹窗 -->
-  <div id="court-manage-modal" class="modal-overlay hidden">
+  <!-- Modal: 球场本地数据管理弹窗 -->
+  <div id="court-manage-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modal-manage-title">
     <div class="modal-card">
       <div class="modal-header">
         <div>
-          <h3 class="modal-title">🏸 球场数据库管理</h3>
-          <span class="db-status-badge">⚡ Cloudflare D1 云端数据库</span>
+          <h3 class="modal-title" id="modal-manage-title">球场数据管理</h3>
+          <span class="db-status-badge">本地 CSV 格式存储 · 100% 离线</span>
         </div>
-        <button type="button" class="modal-close-btn" id="court-modal-close">&times;</button>
+        <button type="button" class="modal-close-btn" id="modal-close-btn" aria-label="关闭弹窗">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
       </div>
       
       <div class="modal-body">
         <!-- Form to Add/Edit Venue -->
         <div class="manage-form-card">
-          <h4 id="manage-form-title">➕ 添加新球场</h4>
+          <h4 id="venue-form-title">添加新球场</h4>
           <input type="hidden" id="venue-edit-id" value="">
           
           <div class="form-group">
@@ -764,14 +441,17 @@
           </div>
           
           <div class="form-actions">
-            <button type="button" id="btn-save-venue" class="btn-primary-action">💾 保存至云端数据库</button>
-            <button type="button" id="btn-cancel-edit-venue" class="btn-secondary-action hidden">取消编辑</button>
+            <button type="button" id="btn-save-venue" class="btn-primary-action">保存球场</button>
+            <button type="button" id="btn-cancel-venue-edit" class="btn-secondary-action hidden">取消编辑</button>
           </div>
         </div>
 
         <!-- Venue List Container -->
         <div class="venues-list-container">
-          <h4>📋 已存数据库球场列表</h4>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h4>球场列表</h4>
+            <button type="button" id="btn-reset-venues-csv" class="btn-secondary-action" style="padding: 4px 10px; font-size: var(--text-xs); height: 28px;" title="重置为默认 CSV 场地">恢复默认 CSV</button>
+          </div>
           <div id="modal-venues-list" class="modal-venues-list">
             <!-- 动态渲染数据 -->
           </div>
@@ -780,469 +460,28 @@
     </div>
   </div>
 
-  <!-- Modal: 完整编辑历史账单数据弹窗 -->
-  <div id="edit-bill-modal" class="modal-overlay hidden">
-    <div class="modal-card">
-      <div class="modal-header">
-        <div>
-          <h3 class="modal-title">✏️ 编辑历史账单数据</h3>
-          <span class="db-status-badge">⚡ Cloudflare D1 数据库实时更新</span>
-        </div>
-        <button type="button" class="modal-close-btn" id="edit-bill-modal-close">&times;</button>
-      </div>
-      
-      <div class="modal-body">
-        <form id="edit-bill-form" class="manage-form-card" onsubmit="return false;">
-          <input type="hidden" id="edit-bill-id">
-
-          <div class="form-group">
-            <label for="edit-bill-title">账单标题</label>
-            <input type="text" id="edit-bill-title" class="modal-input" required>
-          </div>
-
-          <div class="form-group">
-            <label for="edit-bill-venue">球场名称</label>
-            <input type="text" id="edit-bill-venue" class="modal-input" required>
-          </div>
-
-          <div class="form-row-2col">
-            <div class="form-group">
-              <label for="edit-bill-players">参与总人数</label>
-              <input type="number" id="edit-bill-players" min="1" class="modal-input" required>
-            </div>
-            <div class="form-group">
-              <label for="edit-bill-hosts">Host 免单人数</label>
-              <input type="number" id="edit-bill-hosts" min="0" class="modal-input" required>
-            </div>
-          </div>
-
-          <div class="form-row-2col">
-            <div class="form-group">
-              <label for="edit-bill-courts">场地数量 (片)</label>
-              <input type="number" id="edit-bill-courts" min="1" max="10" class="modal-input" required>
-            </div>
-            <div class="form-group">
-              <label for="edit-bill-duration">时长 (小时)</label>
-              <input type="number" id="edit-bill-duration" min="1" max="12" class="modal-input" required>
-            </div>
-          </div>
-
-          <div class="form-row-2col">
-            <div class="form-group">
-              <label for="edit-bill-shuttles">用球数量 (个)</label>
-              <input type="number" id="edit-bill-shuttles" min="0" class="modal-input" required>
-            </div>
-            <div class="form-group">
-              <label for="edit-bill-shuttle-price">羽球筒价 (RM)</label>
-              <input type="number" id="edit-bill-shuttle-price" step="0.01" min="0" class="modal-input" required>
-            </div>
-          </div>
-
-          <div class="form-row-2col">
-            <div class="form-group">
-              <label for="edit-bill-add-shuttles">附加买球 (个)</label>
-              <input type="number" id="edit-bill-add-shuttles" min="0" class="modal-input" required>
-            </div>
-            <div class="form-group">
-              <label for="edit-bill-player-fee">每人平摊收费 (RM)</label>
-              <input type="number" id="edit-bill-player-fee" step="0.01" min="0" class="modal-input" required>
-            </div>
-          </div>
-
-          <div class="form-actions">
-            <button type="button" id="btn-save-edit-bill" class="btn-primary-action">💾 保存账单所有修改</button>
-            <button type="button" id="btn-cancel-edit-bill" class="btn-secondary-action">取消</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <!-- Reusable Custom Bottom-Sheet Modal Drawer -->
-  <div id="drawer-overlay" class="drawer-overlay hidden">
+  <!-- Reusable Custom Bottom-Sheet Modal Drawer for Players & Shuttles Picker -->
+  <div id="drawer-overlay" class="drawer-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
     <div class="drawer-sheet">
       <div class="drawer-header">
         <span id="drawer-title" class="drawer-title">选择选项</span>
-        <button id="drawer-close" class="drawer-close-btn">&times;</button>
+        <button type="button" id="drawer-close" class="drawer-close-btn" aria-label="关闭选择器">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
       </div>
       <div id="drawer-body" class="drawer-body"></div>
     </div>
   </div>
 
-  <!-- Modal: 添加/编辑金融平台机构 -->
-  <div id="fin-platform-modal" class="modal-overlay hidden">
-    <div class="modal-card" style="max-width: 480px;">
-      <div class="modal-header">
-        <div>
-          <h3 class="modal-title" id="fin-plat-modal-title">➕ 添加金融平台机构</h3>
-          <span class="db-status-badge">⚡ Cloudflare D1 机构主数据</span>
-        </div>
-        <button type="button" class="modal-close-btn" id="fin-plat-modal-close">&times;</button>
-      </div>
-      <form id="fin-platform-form" class="modal-body">
-        <input type="hidden" id="fin-plat-id">
-        <div class="input-group">
-          <label for="fin-plat-name">平台名称 (必填) *</label>
-          <input type="text" id="fin-plat-name" class="modal-input" placeholder="例如：Hong Leong Bank, Maybank, IBKR" required>
-        </div>
-        <div class="input-group">
-          <label for="fin-plat-logo">Logo 图片链接 / 图标 URL</label>
-          <input type="url" id="fin-plat-logo" class="modal-input" placeholder="https://example.com/logo.png">
-        </div>
-        <div class="input-group">
-          <label for="fin-plat-desc">简要备注说明</label>
-          <input type="text" id="fin-plat-desc" class="modal-input" placeholder="例如：主工资行、美股券商">
-        </div>
-        <div class="input-group">
-          <label for="fin-plat-order">排序权重 (数字越小越靠前)</label>
-          <input type="number" id="fin-plat-order" class="modal-input" value="0">
-        </div>
-        <div class="modal-footer" style="padding: 16px 0 0; margin-top: 16px;">
-          <button type="submit" class="btn-primary-action" style="width:100%;">💾 保存平台机构</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- Modal: 添加/编辑金融产品/子账户 -->
-  <div id="fin-product-modal" class="modal-overlay hidden">
-    <div class="modal-card" style="max-width: 480px;">
-      <div class="modal-header">
-        <div>
-          <h3 class="modal-title" id="fin-prod-modal-title">➕ 添加金融产品/子账户</h3>
-          <span class="db-status-badge">⚡ Cloudflare D1 产品主数据</span>
-        </div>
-        <button type="button" class="modal-close-btn" id="fin-prod-modal-close">&times;</button>
-      </div>
-      <form id="fin-product-form" class="modal-body">
-        <input type="hidden" id="fin-prod-id">
-        <div class="input-group">
-          <label for="fin-prod-platform-select">所属平台机构 (必选) *</label>
-          <select id="fin-prod-platform-select" class="modal-select" required></select>
-        </div>
-        <div class="input-group">
-          <label for="fin-prod-name">产品/账户名称 (必填) *</label>
-          <input type="text" id="fin-prod-name" class="modal-input" placeholder="例如：Pay&Save 活期, 定期存单, 美股持仓" required>
-        </div>
-        <div class="calc-row">
-          <div class="input-group">
-            <label for="fin-prod-type">资产大类 *</label>
-            <select id="fin-prod-type" class="modal-select">
-              <option value="Savings">🏦 储蓄/活期 (Savings)</option>
-              <option value="Fixed Deposit">🔒 定期存款 (FD)</option>
-              <option value="Cash">💵 现金 (Cash)</option>
-              <option value="Investment">📈 基金/理财 (Investment)</option>
-              <option value="Brokerage">📊 股票/证券 (Brokerage)</option>
-              <option value="E-Wallet">📱 电子钱包 (E-Wallet)</option>
-              <option value="Other">📦 其他资产 (Other)</option>
-            </select>
-          </div>
-          <div class="input-group">
-            <label for="fin-prod-currency">结算币种 *</label>
-            <select id="fin-prod-currency" class="modal-select">
-              <option value="MYR">MYR (令吉)</option>
-              <option value="USD">USD (美元)</option>
-              <option value="SGD">SGD (新币)</option>
-              <option value="HKD">HKD (港币)</option>
-              <option value="CNY">CNY (人民币)</option>
-              <option value="EUR">EUR (欧元)</option>
-              <option value="GBP">GBP (英镑)</option>
-              <option value="JPY">JPY (日元)</option>
-              <option value="AUD">AUD (澳元)</option>
-            </select>
-          </div>
-        </div>
-        <div class="calc-row">
-          <div class="input-group">
-            <label for="fin-prod-target">目标配置占比 (%)</label>
-            <input type="number" step="0.1" min="0" max="100" id="fin-prod-target" class="modal-input" placeholder="0.0">
-          </div>
-          <div class="input-group">
-            <label for="fin-prod-order">排序权重</label>
-            <input type="number" id="fin-prod-order" class="modal-input" value="0">
-          </div>
-        </div>
-        <div class="input-group">
-          <label for="fin-prod-logo">专属产品 Logo / 图标 (留空继承平台 Logo)</label>
-          <input type="url" id="fin-prod-logo" class="modal-input" placeholder="https://example.com/icon.png">
-        </div>
-        <div class="input-group">
-          <label for="fin-prod-notes">产品备注</label>
-          <input type="text" id="fin-prod-notes" class="modal-input" placeholder="例如：利率 3.85% p.a., 2026-12 到期">
-        </div>
-        <div class="modal-footer" style="padding: 16px 0 0; margin-top: 16px;">
-          <button type="submit" class="btn-primary-action" style="width:100%;">💾 保存产品账户</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- Modal: 数据备份与恢复 -->
-  <div id="fin-backup-modal" class="modal-overlay hidden">
-    <div class="modal-card" style="max-width: 480px;">
-      <div class="modal-header">
-        <div>
-          <h3 class="modal-title">📦 数据备份与本地恢复</h3>
-          <span class="db-status-badge">⚡ JSON 离线快照 / 数据主权</span>
-        </div>
-        <button type="button" class="modal-close-btn" id="fin-backup-modal-close">&times;</button>
-      </div>
-      <div class="modal-body">
-        <div style="display: flex; flex-direction: column; gap: 16px;">
-          <!-- 1. 一键同步至云端 -->
-          <div style="padding: 16px; background: linear-gradient(135deg, rgba(56, 189, 248, 0.08), rgba(99, 102, 241, 0.08)); border-radius: 12px; border: 1px solid rgba(56, 189, 248, 0.25);">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
-              <h4 style="margin: 0; font-size: 0.95rem; color: var(--text-primary);">☁️ 一键同步本地数据到云端</h4>
-              <span class="shortcut-pill-badge" style="background: rgba(56,189,248,0.15); color: #38bdf8; border-color: rgba(56,189,248,0.3);">Cloud Sync</span>
-            </div>
-            <p style="margin: 0 0 12px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.4;">
-              将您在本地浏览器保存的全部平台、金融产品及历史录入数据直接全量上传至当前登录的云端 D1 数据库账号中。
-            </p>
-            <button type="button" class="fin-btn-copy" style="width: 100%; justify-content: center; background: linear-gradient(135deg, #0284c7, #2563eb); color: #fff; font-weight: 700;" onclick="FinancialUI.handleSyncToCloud()">
-              <span>☁️</span> <span>立即全量同步到云端账号</span>
-            </button>
-          </div>
-
-          <!-- 2. 导出 JSON -->
-          <div style="padding: 16px; background: var(--surface-hover); border-radius: 12px; border: 1px solid var(--border-subtle);">
-            <h4 style="margin: 0 0 6px; font-size: 0.95rem; color: var(--text-primary);">📥 导出全量财务数据</h4>
-            <p style="margin: 0 0 12px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.4;">
-              将您所有的机构平台、金融产品、历史月度周期及余额快照导出为标准 JSON 文件，用于异地备份或迁移。
-            </p>
-            <button type="button" class="fin-btn-save" style="width: 100%; justify-content: center;" onclick="FinancialAPI.exportBackupJSON()">
-              <span>📥</span> <span>一键导出 JSON 备份文件</span>
-            </button>
-          </div>
-
-          <!-- 3. 导入 JSON -->
-          <div style="padding: 16px; background: var(--surface-hover); border-radius: 12px; border: 1px solid var(--border-subtle);">
-            <h4 style="margin: 0 0 6px; font-size: 0.95rem; color: var(--text-primary);">📤 从 JSON 备份文件恢复</h4>
-            <p style="margin: 0 0 12px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.4;">
-              选择之前导出的 JSON 备份文件进行数据还原。注意：导入将更新或覆盖现有本地快照。
-            </p>
-            <input type="file" id="fin-backup-file-input" accept=".json" style="display: none;" onchange="FinancialUI.handleBackupFileUpload(event)">
-            <button type="button" class="fin-btn-outline" style="width: 100%; justify-content: center;" onclick="document.getElementById('fin-backup-file-input').click()">
-              <span>📂</span> <span>选择备份文件并恢复</span>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- =================================================================== -->
-  <!-- MODALS: AUTH, PROFILE, ADMIN & TEMPLATE MARKETPLACE -->
-  <!-- =================================================================== -->
-
-  <!-- Modal: 用户登录与注册 -->
-  <div id="auth-modal" class="modal-overlay hidden">
-    <div class="modal-card" style="max-width: 420px;">
-      <div class="modal-header">
-        <div>
-          <h3 class="modal-title" id="auth-modal-title">用户登录</h3>
-          <span class="db-status-badge">🔐 安全用户中心 / 数据独立隔离</span>
-        </div>
-        <button type="button" class="modal-close-btn" onclick="Auth.closeLoginModal()">&times;</button>
-      </div>
-      <div class="modal-body">
-        <div class="auth-modal-tabs">
-          <button type="button" class="auth-modal-tab active" id="auth-tab-login" onclick="Auth.switchModalTab('login')">🔑 账号登录</button>
-          <button type="button" class="auth-modal-tab" id="auth-tab-register" onclick="Auth.switchModalTab('register')">✨ 新用户注册</button>
-        </div>
-
-        <form id="auth-form" data-mode="login">
-          <div class="input-group">
-            <label for="auth-username-input">用户名 (Username) *</label>
-            <input type="text" id="auth-username-input" class="modal-input" placeholder="字母、数字、中文 (2-30位)" required autocomplete="username">
-          </div>
-
-          <div class="input-group hidden" id="auth-nickname-group">
-            <label for="auth-nickname-input">显示昵称 (Nickname)</label>
-            <input type="text" id="auth-nickname-input" class="modal-input" placeholder="在界面上展示的名字 (留空同用户名)">
-          </div>
-
-          <div class="input-group">
-            <label for="auth-password-input">登录密码 (Password) *</label>
-            <input type="password" id="auth-password-input" class="modal-input" placeholder="至少 6 位安全密码" required autocomplete="current-password">
-          </div>
-
-          <div class="modal-footer" style="padding: 16px 0 0; margin-top: 16px;">
-            <button type="submit" class="btn-primary-action" id="auth-submit-btn" style="width:100%;">
-              <span>🚀</span> <span>立即登录</span>
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal: 个人资料与修改密码 -->
-  <div id="auth-profile-modal" class="modal-overlay hidden">
-    <div class="modal-card" style="max-width: 440px;">
-      <div class="modal-header">
-        <div>
-          <h3 class="modal-title">👤 个人资料与安全设置</h3>
-          <span class="db-status-badge" id="profile-role-display">标准用户</span>
-        </div>
-        <button type="button" class="modal-close-btn" onclick="Auth.closeProfileModal()">&times;</button>
-      </div>
-      <div class="modal-body">
-        <form id="auth-profile-form">
-          <div class="input-group">
-            <label>登录用户名 (不可修改)</label>
-            <div style="padding: 9px 12px; background: var(--surface-hover); border: 1px solid var(--border-subtle); border-radius: 8px; font-weight: 700; color: var(--text-muted);" id="profile-username-display">-</div>
-          </div>
-
-          <div class="input-group">
-            <label for="profile-nickname-input">显示昵称</label>
-            <input type="text" id="profile-nickname-input" class="modal-input" placeholder="输入新的昵称">
-          </div>
-
-          <div class="input-group">
-            <label for="profile-avatar-input">头像图片链接 (URL)</label>
-            <input type="url" id="profile-avatar-input" class="modal-input" placeholder="https://example.com/avatar.png">
-          </div>
-
-          <div style="border-top: 1px solid var(--border-subtle); margin: 16px 0 12px; padding-top: 12px;">
-            <h4 style="margin: 0 0 10px; font-size: 0.9rem; color: var(--text-primary);">🔐 修改登录密码 (留空则不修改)</h4>
-            <div class="input-group">
-              <label for="profile-old-pass-input">当前旧密码</label>
-              <input type="password" id="profile-old-pass-input" class="modal-input" placeholder="若修改密码请输入原密码">
-            </div>
-            <div class="input-group">
-              <label for="profile-new-pass-input">新密码</label>
-              <input type="password" id="profile-new-pass-input" class="modal-input" placeholder="至少 6 位新密码">
-            </div>
-          </div>
-
-          <div class="modal-footer" style="padding: 16px 0 0; margin-top: 16px;">
-            <button type="submit" class="btn-primary-action" style="width:100%;">💾 保存更新</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal: 用户与权限管理 (Admin) -->
-  <div id="admin-users-modal" class="modal-overlay hidden">
-    <div class="modal-card" style="max-width: 760px; max-height: 85vh; display: flex; flex-direction: column;">
-      <div class="modal-header">
-        <div>
-          <h3 class="modal-title">👑 全站用户与权限管理</h3>
-          <span class="db-status-badge">管理员控制台 (Admin Console)</span>
-        </div>
-        <button type="button" class="modal-close-btn" onclick="Auth.closeAdminUsersModal()">&times;</button>
-      </div>
-      <div class="modal-body" style="flex: 1; overflow-y: auto; padding: 0 16px 16px;">
-        <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 8px;">
-          <thead>
-            <tr style="border-bottom: 1px solid var(--border-strong); text-align: left; color: var(--text-muted);">
-              <th style="padding: 8px;">ID</th>
-              <th style="padding: 8px;">用户</th>
-              <th style="padding: 8px;">角色</th>
-              <th style="padding: 8px;">状态</th>
-              <th style="padding: 8px;">注册时间</th>
-              <th style="padding: 8px;">操作</th>
-            </tr>
-          </thead>
-          <tbody id="admin-users-list-tbody">
-            <!-- Dynamic users list -->
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal: 平台/Logo 预设模板库 -->
-  <div id="fin-template-market-modal" class="modal-overlay hidden">
-    <div class="modal-card" style="max-width: 860px; max-height: 88vh; display: flex; flex-direction: column;">
-      <div class="modal-header">
-        <div>
-          <h3 class="modal-title">✨ 金融平台与 Logo 预设模板库</h3>
-          <span class="db-status-badge">一键导入主流银行、券商、电子钱包与养老金模板</span>
-        </div>
-        <button type="button" class="modal-close-btn" onclick="FinancialUI.closeTemplateMarketModal()">&times;</button>
-      </div>
-      <div class="modal-body" style="flex: 1; overflow-y: auto; padding: 12px 16px 20px;">
-        <!-- Search and Category Filters -->
-        <div style="display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap;">
-          <input type="text" id="template-search-input" class="modal-input" placeholder="🔍 搜索机构名称、关键词 (如 Maybank, EPF, 币安)..." style="flex: 1; min-width: 220px;" oninput="FinancialUI.handleTemplateSearch(event)">
-        </div>
-
-        <div class="fin-template-category-nav" id="template-category-nav">
-          <button type="button" class="fin-template-cat-btn active" data-cat="all" onclick="FinancialUI.filterTemplateCategory('all')">全部模板</button>
-          <button type="button" class="fin-template-cat-btn" data-cat="Banking" onclick="FinancialUI.filterTemplateCategory('Banking')">🏦 商业银行</button>
-          <button type="button" class="fin-template-cat-btn" data-cat="Investment" onclick="FinancialUI.filterTemplateCategory('Investment')">📈 投资证券</button>
-          <button type="button" class="fin-template-cat-btn" data-cat="E-Wallet" onclick="FinancialUI.filterTemplateCategory('E-Wallet')">📱 电子钱包</button>
-          <button type="button" class="fin-template-cat-btn" data-cat="Crypto" onclick="FinancialUI.filterTemplateCategory('Crypto')">🪙 加密资产</button>
-          <button type="button" class="fin-template-cat-btn" data-cat="Pension" onclick="FinancialUI.filterTemplateCategory('Pension')">🛡️ 养老公积金</button>
-          <button type="button" class="fin-template-cat-btn" data-cat="Forex" onclick="FinancialUI.filterTemplateCategory('Forex')">💱 跨境外汇</button>
-          <button type="button" class="fin-template-cat-btn" data-cat="Cash" onclick="FinancialUI.filterTemplateCategory('Cash')">💵 实体现金</button>
-        </div>
-
-        <!-- Template Cards Grid -->
-        <div class="fin-template-grid" id="fin-template-grid">
-          <!-- Dynamic templates rendered here -->
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal: 发布平台为公共模板 -->
-  <div id="fin-publish-template-modal" class="modal-overlay hidden">
-    <div class="modal-card" style="max-width: 440px;">
-      <div class="modal-header">
-        <div>
-          <h3 class="modal-title">📤 分享并发布为公共模板</h3>
-          <span class="db-status-badge">贡献到全站模板库供其他用户直接使用</span>
-        </div>
-        <button type="button" class="modal-close-btn" onclick="FinancialUI.closePublishTemplateModal()">&times;</button>
-      </div>
-      <div class="modal-body">
-        <form id="fin-publish-template-form">
-          <input type="hidden" id="publish-template-plat-id">
-          <div class="input-group">
-            <label>平台名称</label>
-            <div id="publish-template-plat-name" style="font-weight:700; color:var(--text-primary); padding:8px 0;">-</div>
-          </div>
-          <div class="input-group">
-            <label for="publish-template-cat-select">模板分类 *</label>
-            <select id="publish-template-cat-select" class="modal-input">
-              <option value="Banking">🏦 商业银行 (Banking)</option>
-              <option value="Investment">📈 投资证券 (Investment)</option>
-              <option value="E-Wallet">📱 电子钱包 (E-Wallet)</option>
-              <option value="Crypto">🪙 加密资产 (Crypto)</option>
-              <option value="Pension">🛡️ 养老公积金 (Pension)</option>
-              <option value="Forex">💱 跨境外汇 (Forex)</option>
-              <option value="Cash">💵 实体现金 (Cash)</option>
-            </select>
-          </div>
-          <div class="input-group">
-            <label for="publish-template-desc-input">模板简介与使用说明</label>
-            <textarea id="publish-template-desc-input" class="modal-input" rows="3" placeholder="简述该机构平台及包含的产品类型"></textarea>
-          </div>
-          <div class="modal-footer" style="padding: 16px 0 0; margin-top: 16px;">
-            <button type="submit" class="btn-primary-action" style="width:100%;">🚀 确认发布到模板市场</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <!-- Categorized JS Module Scripts -->
-  <script src="js/core/router.js"></script>
+  <!-- Core Scripts -->
   <script src="js/core/theme.js"></script>
   <script src="js/core/drawer.js"></script>
-  <script src="js/core/auth.js"></script>
-  <script src="js/courtledger/state.js"></script>
   <script src="js/courtledger/calculator.js"></script>
+  <script src="js/courtledger/state.js"></script>
   <script src="js/courtledger/ui.js"></script>
-  <!-- Financial Overview (Sub-App #2) Scripts -->
-  <script src="js/financial/api.js"></script>
-  <script src="js/financial/formatters.js"></script>
-  <script src="js/financial/state.js"></script>
-  <script src="js/financial/charts.js"></script>
-  <script src="js/financial/ui.js"></script>
   <script src="js/main.js"></script>
 </body>
 

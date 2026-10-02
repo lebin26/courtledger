@@ -1,31 +1,19 @@
 {
-  "name": "omnibox",
+  "name": "court-ledger",
   "version": "1.0.0",
-  "description": "OmniBox - 多功能应用聚合平台 (Court Ledger & Financial Overview)",
+  "description": "Court Ledger - 纯离线羽毛球 AA 算账计算器 (Offline Badminton Expense Calculator)",
   "private": true,
   "scripts": {
-    "dev": "cd worker && npx wrangler dev",
-    "start": "npm run dev",
-    "test": "node --test tests/*.test.mjs",
-    "test:unit": "node --test tests/api_schema.test.mjs tests/calculator.test.mjs tests/bills.test.mjs tests/financial_overview.test.mjs",
-    "test:e2e": "node --test tests/courtledger_e2e.test.mjs",
-    "worker:dev": "cd worker && npx wrangler dev",
-    "worker:deploy": "cd worker && npx wrangler deploy",
-    "d1:migrate": "cd worker && npx wrangler d1 execute host-calculator-db --remote --file=../migrations/0001_create_venues.sql",
-    "d1:migrate:local": "cd worker && npx wrangler d1 execute host-calculator-db --local --file=../migrations/0001_create_venues.sql",
-    "d1:pull": "cd worker && rm -rf .wrangler/state/v3/d1 && npx wrangler d1 export host-calculator-db --remote --output=./dump_remote.sql && npx wrangler d1 execute host-calculator-db --local --file=./dump_remote.sql && rm ./dump_remote.sql"
+    "start": "npx serve frontend -l 8000",
+    "dev": "npx serve frontend -l 8000",
+    "test": "node --test tests/*.test.mjs"
   },
   "keywords": [
     "badminton",
     "calculator",
     "court-ledger",
-    "financial-overview",
-    "cloudflare-worker",
-    "cloudflare-d1"
+    "offline"
   ],
   "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "wrangler": "^3.109.2"
-  }
+  "license": "ISC"
 }
