@@ -8,7 +8,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="format-detection" content="telephone=no">
-  <title>Court Ledger — 羽毛球 AA 算账计算器</title>
+  <title>Court Ledger</title>
   <link rel="icon" href="favicon.ico" type="image/x-icon">
 
   <!-- Direct CSS Module Loading (Zero-Build) -->
@@ -18,467 +18,485 @@
 </head>
 
 <body>
-  <div class="app-container">
-    <!-- Top Header Bar with Theme & Settings -->
-    <header class="tv-header" role="banner">
-      <div class="tv-logo-area">
-        <span class="tv-title">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--accent);">
+  <!-- Top Header Bar (56px, blur backdrop) -->
+  <header class="app-header" role="banner">
+    <div class="header-inner">
+      <div class="brand-area">
+        <div class="brand-icon-box" aria-hidden="true">
+          <!-- Badminton court / shuttlecock minimal linear icon -->
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
           </svg>
-          <span>Court Ledger</span>
-          <span class="tv-title-badge">离线版</span>
-        </span>
+        </div>
+        <span class="brand-title">Court Ledger</span>
       </div>
-      <div class="tv-header-actions">
-        <!-- Settings Button & Dropdown -->
-        <div class="settings-container">
-          <button type="button" id="courtledger-settings-btn" class="tv-btn-settings" title="偏好与主题设置" aria-label="设置与主题">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+
+      <div class="header-actions">
+        <!-- Settings button & popover -->
+        <div class="settings-dropdown-wrapper">
+          <button type="button" id="courtledger-settings-btn" class="btn-header-icon" title="偏好与球场设置" aria-label="设置与管理">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <circle cx="12" cy="12" r="3"></circle>
               <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
             </svg>
           </button>
-          <div id="courtledger-settings-dropdown" class="settings-dropdown hidden" role="menu">
-            <!-- Theme Selection -->
-            <div class="settings-section">
-              <div class="settings-section-title">显示主题</div>
-              <div class="theme-options">
-                <button type="button" class="theme-opt-btn" data-theme="dark">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                  </svg>
-                  <span class="opt-text">深色模式</span>
-                </button>
-                <button type="button" class="theme-opt-btn" data-theme="light">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <circle cx="12" cy="12" r="5"></circle>
-                    <line x1="12" y1="1" x2="12" y2="3"></line>
-                    <line x1="12" y1="21" x2="12" y2="23"></line>
-                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                    <line x1="1" y1="12" x2="3" y2="12"></line>
-                    <line x1="21" y1="12" x2="23" y2="12"></line>
-                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                  </svg>
-                  <span class="opt-text">浅色模式</span>
-                </button>
-                <button type="button" class="theme-opt-btn" data-theme="system">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                    <line x1="8" y1="21" x2="16" y2="21"></line>
-                    <line x1="12" y1="17" x2="12" y2="21"></line>
-                  </svg>
-                  <span class="opt-text">跟随系统</span>
-                </button>
-              </div>
-            </div>
 
-            <!-- Court Ledger Tools -->
-            <div class="settings-section">
-              <div class="settings-section-title">场地管理</div>
-              <div class="settings-menu-list">
-                <button type="button" class="settings-menu-item" id="menu-manage-venues">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <rect x="3" y="3" width="18" height="18" rx="2"></rect>
-                    <line x1="3" y1="9" x2="21" y2="9"></line>
-                    <line x1="9" y1="21" x2="9" y2="9"></line>
-                  </svg>
-                  <span class="opt-text">球场数据管理</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </header>
-
-    <!-- Main Content Viewport -->
-    <main class="app-main-viewport" role="main">
-
-      <!-- PURE OFFLINE CALCULATOR VIEW -->
-      <div id="view-courtledger" class="app-view active">
-        <div class="calculator-card">
-
-          <!-- Mobile Only Ticker (Hero metric on Mobile) -->
-          <section class="ticker-section mobile-only-ticker" aria-live="polite">
-            <span class="ticker-label">每人收费</span>
-            <div class="ticker-price-container">
-              <span class="ticker-currency currency-unit">RM</span>
-              <span id="player-fee-display" class="ticker-price player-fee-val">0.00</span>
-            </div>
-          </section>
-
-          <div class="calc-main-layout">
-            <!-- Left Column: Inputs Section -->
-            <section class="inputs-section" aria-label="计算参数输入">
-
-              <!-- 场地选择 & 场地费计算参数 -->
-              <div class="court-fee-config-box">
-                <div class="input-group venue-group">
-                  <div class="label-row-between">
-                    <label for="venue-select">选择场地</label>
-                    <div class="venue-header-actions">
-                      <span id="venue-rate-badge" class="venue-rate-badge">加载中...</span>
-                      <button type="button" id="btn-manage-venues" class="btn-icon-link" title="球场数据管理">
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                          <circle cx="12" cy="12" r="3"></circle>
-                          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                        </svg>
-                        <span>管理球场</span>
-                      </button>
-                    </div>
-                  </div>
-                  <div class="input-wrapper select-wrapper">
-                    <select id="venue-select" aria-label="选择球场">
-                      <!-- 动态由 CSV / 本地存储加载 -->
-                    </select>
-                    <span class="select-chevron" aria-hidden="true">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="6 9 12 15 18 9"></polyline>
-                      </svg>
-                    </span>
-                  </div>
-                </div>
-
-                <div class="input-row-2col">
-                  <div class="input-group">
-                    <label for="start-time-select">开始时间</label>
-                    <div class="input-wrapper select-wrapper">
-                      <select id="start-time-select">
-                        <option value="0">12:00 AM</option>
-                        <option value="1">1:00 AM</option>
-                        <option value="2">2:00 AM</option>
-                        <option value="3">3:00 AM</option>
-                        <option value="4">4:00 AM</option>
-                        <option value="5">5:00 AM</option>
-                        <option value="6">6:00 AM</option>
-                        <option value="7">7:00 AM</option>
-                        <option value="8">8:00 AM</option>
-                        <option value="9">9:00 AM</option>
-                        <option value="10">10:00 AM</option>
-                        <option value="11">11:00 AM</option>
-                        <option value="12">12:00 PM</option>
-                        <option value="13">1:00 PM</option>
-                        <option value="14">2:00 PM</option>
-                        <option value="15">3:00 PM</option>
-                        <option value="16" selected>4:00 PM</option>
-                        <option value="17">5:00 PM</option>
-                        <option value="18">6:00 PM</option>
-                        <option value="19">7:00 PM</option>
-                        <option value="20">8:00 PM</option>
-                        <option value="21">9:00 PM</option>
-                        <option value="22">10:00 PM</option>
-                        <option value="23">11:00 PM</option>
-                      </select>
-                      <span class="select-chevron" aria-hidden="true">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                          <polyline points="6 9 12 15 18 9"></polyline>
-                        </svg>
-                      </span>
-                    </div>
-                  </div>
-
-                  <div class="input-group">
-                    <label>活动时长 (点击展开)</label>
-                    <div id="duration-trigger" class="picker-trigger duration-trigger-box" tabindex="0" role="button" aria-expanded="false" aria-label="展开活动时长滑动条">
-                      <span id="duration-display" class="picker-value">2 小时</span>
-                      <span class="picker-chevron" aria-hidden="true">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                          <polyline points="6 9 12 15 18 9"></polyline>
-                        </svg>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div id="duration-slider-panel" class="slider-panel collapsed" aria-label="调整时长面板">
-                  <div class="slider-header">
-                    <span>滑动微调时长</span>
-                    <span id="slider-val-bubble">2 小时</span>
-                  </div>
-                  <div class="slider-wrapper">
-                    <span class="slider-boundary-label">1h</span>
-                    <input type="range" id="duration-slider" min="1" max="4" value="2" step="1" aria-label="时长滑块">
-                    <span class="slider-boundary-label">4h</span>
-                  </div>
-                  <div id="time-range-display" class="time-range-banner">4:00 PM - 6:00 PM</div>
-                </div>
-
-                <div class="input-group">
-                  <label id="court-count-label">场地数量</label>
-                  <div class="segmented-control" id="court-segmented-control" role="radiogroup" aria-labelledby="court-count-label">
-                    <input type="radio" name="court-count" id="court-1" value="1">
-                    <label for="court-1">1 片</label>
-
-                    <input type="radio" name="court-count" id="court-2" value="2" checked>
-                    <label for="court-2">2 片</label>
-
-                    <input type="radio" name="court-count" id="court-3" value="3">
-                    <label for="court-3">3 片</label>
-
-                    <input type="radio" name="court-count" id="court-4" value="4">
-                    <label for="court-4">4 片</label>
-                  </div>
-                </div>
-
-                <div class="input-group court-fee-display-wrapper">
-                  <label for="court-fee">场地费 (自动换算)</label>
-                  <div class="input-wrapper read-only-input">
-                    <span class="input-prefix currency-unit">RM</span>
-                    <input type="text" id="court-fee" value="0.00" readonly tabindex="-1">
-                    <span id="court-fee-breakdown" class="input-suffix-tag">未选择场地</span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- 人数与 Host 配置 -->
-              <div class="input-row-2col">
-                <div class="input-group">
-                  <label>参与总人数 (含Host)</label>
-                  <div id="players-picker" class="picker-trigger" tabindex="0" role="button" aria-haspopup="dialog" aria-label="选择参与总人数">
-                    <span id="players-display" class="picker-value">6</span>
-                    <span class="picker-suffix currency-unit">人</span>
-                    <span class="picker-chevron" aria-hidden="true">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="6 9 12 15 18 9"></polyline>
-                      </svg>
-                    </span>
-                  </div>
-                  <input type="hidden" id="total-players" value="6">
-                </div>
-
-                <div class="input-group">
-                  <label id="host-count-label">Host 数量 (免单)</label>
-                  <div class="host-selector-segmented" role="radiogroup" aria-labelledby="host-count-label">
-                    <button type="button" class="host-opt-btn active" data-host="0">0 Host</button>
-                    <button type="button" class="host-opt-btn" data-host="1">1 Host</button>
-                    <button type="button" class="host-opt-btn" data-host="2">2 Host</button>
-                  </div>
-                  <input type="hidden" id="host-count" value="0">
-                </div>
-              </div>
-
-              <!-- 用球与价格配置 -->
-              <div class="input-row-2col">
-                <div class="input-group">
-                  <label>用球数量 (真实消耗)</label>
-                  <div id="shuttles-picker" class="picker-trigger" tabindex="0" role="button" aria-haspopup="dialog" aria-label="选择用球数量">
-                    <span id="shuttles-display" class="picker-value">3</span>
-                    <span class="picker-suffix currency-unit">个</span>
-                    <span class="picker-chevron" aria-hidden="true">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="6 9 12 15 18 9"></polyline>
-                      </svg>
-                    </span>
-                  </div>
-                  <input type="hidden" id="shuttles-used" value="3">
-                </div>
-                <div class="input-group">
-                  <label for="shuttle-price">羽毛球价格 (每桶)</label>
-                  <div class="input-wrapper">
-                    <span class="input-prefix currency-unit">RM</span>
-                    <input type="number" id="shuttle-price" value="123.00" min="0" step="0.01" placeholder="0.00" inputmode="decimal">
-                  </div>
-                </div>
-              </div>
-
-              <!-- 附加加球 -->
-              <div class="input-group full-width-group">
-                <div class="label-row-between">
-                  <label>附加加球 (覆盖 Host / 盈利)</label>
-                  <span id="shuttle-info-tag" class="info-pill-tag success-tag">无需加球覆盖 Host</span>
-                </div>
-                <div class="stepper-wrapper">
-                  <button type="button" id="add-shuttles-minus" class="stepper-btn" aria-label="减少附加球">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                      <line x1="5" y1="12" x2="19" y2="12"></line>
-                    </svg>
-                  </button>
-                  <div class="stepper-value-group">
-                    <span id="add-shuttles-display" class="stepper-value">0 个</span>
-                    <span id="profit-shuttles-tag" class="profit-subtag">额外盈利: 0 个</span>
-                  </div>
-                  <button type="button" id="add-shuttles-plus" class="stepper-btn" aria-label="增加附加球">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                      <line x1="12" y1="5" x2="12" y2="19"></line>
-                      <line x1="5" y1="12" x2="19" y2="12"></line>
-                    </svg>
-                  </button>
-                </div>
-                <input type="hidden" id="additional-shuttles" value="0">
-              </div>
-
-            </section>
-
-            <!-- Right Column: Studio Calculation Results Panel -->
-            <aside class="studio-sidepanel" id="courtledger-sidepanel" aria-label="费用计算结果明细">
-              <!-- Desktop Sticky Ticker (Hero metric on Desktop) -->
-              <div class="desktop-ticker-card" aria-live="polite">
-                <span class="ticker-label">每人收费 (实时平摊)</span>
-                <div class="ticker-price-container">
-                  <span class="ticker-currency currency-unit">RM</span>
-                  <span id="player-fee-display-desktop" class="ticker-price player-fee-val">0.00</span>
-                </div>
-              </div>
-
-              <section class="outputs-section">
-                <!-- Shuttle summary breakdown card -->
-                <div class="shuttle-summary-card">
-                  <div class="shuttle-summary-title">用球统计明细</div>
-                  <div class="shuttle-summary-grid">
-                    <div class="shuttle-summary-item">
-                      <span class="item-label">真实用球</span>
-                      <span id="sum-actual-shuttles" class="item-val">0 个</span>
-                    </div>
-                    <div class="shuttle-summary-item">
-                      <span class="item-label">Cover用球</span>
-                      <span id="sum-cover-shuttles" class="item-val tag-blue">0 个</span>
-                    </div>
-                    <div class="shuttle-summary-item">
-                      <span class="item-label">盈利用球</span>
-                      <span id="sum-profit-shuttles" class="item-val tag-green">0 个</span>
-                    </div>
-                    <div class="shuttle-summary-item">
-                      <span class="item-label">被计算总球</span>
-                      <span id="sum-billed-shuttles" class="item-val tag-accent">0 个</span>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Financial totals -->
-                <div class="summary-row">
-                  <span class="summary-label">真实总成本</span>
-                  <div class="summary-value-wrapper">
-                    <span class="summary-currency currency-unit">RM</span>
-                    <span id="total-cost-display" class="summary-value">0.00</span>
-                  </div>
-                </div>
-
-                <div class="summary-row">
-                  <span class="summary-label">总收款 (付费玩家)</span>
-                  <div class="summary-value-wrapper">
-                    <span class="summary-currency currency-unit">RM</span>
-                    <span id="total-revenue-display" class="summary-value">0.00</span>
-                  </div>
-                </div>
-
-                <div id="profit-row" class="summary-row profit-highlight">
-                  <span class="summary-label">净利润 (盈利)</span>
-                  <div class="summary-value-wrapper">
-                    <span class="summary-currency currency-unit">RM</span>
-                    <span id="net-profit-display" class="summary-value">0.00</span>
-                  </div>
-                </div>
-              </section>
-
-              <!-- Calculation Action Buttons -->
-              <div class="cl-calc-actions">
-                <button type="button" id="btn-copy-bill" class="btn-primary-action" style="width: 100%;">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                  </svg>
-                  <span>复制账单明细</span>
-                </button>
-              </div>
-            </aside>
-
-            <!-- Error Banner -->
-            <div id="error-banner" class="error-banner hidden" role="alert">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <circle cx="12" cy="12" r="10"></circle>
-                <line x1="12" y1="8" x2="12" y2="12"></line>
-                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          <div id="courtledger-settings-dropdown" class="settings-popover hidden" role="menu">
+            <button type="button" class="settings-menu-item" id="menu-manage-venues">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                <line x1="3" y1="9" x2="21" y2="9"></line>
+                <line x1="9" y1="21" x2="9" y2="9"></line>
               </svg>
-              <span class="error-msg">参与人数必须大于 Host人数！</span>
+              <span>球场数据管理</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Layout (Desktop Two-Column / Mobile Single Column) -->
+  <main class="calculator-viewport" role="main">
+    <div class="calculator-layout">
+
+      <!-- ── Left Column: iOS-style Grouped Settings ── -->
+      <section class="settings-column" aria-label="计算参数设置">
+
+        <!-- 场地选择条（独立大卡片） -->
+        <div class="venue-hero-card">
+          <div class="venue-primary-row">
+            <span id="venue-name-display" class="venue-title-text">Lavana Sport Center Setapak</span>
+            <svg class="venue-chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+            <!-- Transparent overlay select for seamless mobile/desktop picking -->
+            <select id="venue-select" class="venue-select-overlay" aria-label="切换球场">
+              <!-- Dynamically populated from CSV / LocalStorage -->
+            </select>
+          </div>
+
+          <div class="venue-meta-row">
+            <div class="venue-pills-cluster">
+              <span class="venue-rate-pill">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+                </svg>
+                <span>早场 RM <span id="venue-morning-rate">14.84</span></span>
+              </span>
+
+              <span class="venue-rate-pill">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+                <span>晚场 RM <span id="venue-evening-rate">29.68</span></span>
+              </span>
+            </div>
+
+            <button type="button" id="btn-manage-venues" class="btn-venue-manage-link" title="管理球场数据">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+              </svg>
+              <span>管理</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 分组 1: 时间与场地 -->
+        <div class="settings-group">
+          <div class="group-caption">时间与场地</div>
+          <div class="group-card">
+            <!-- Row 1: 开始时间 -->
+            <div class="setting-row">
+              <span class="row-label">开始时间</span>
+              <div class="select-capsule">
+                <span id="start-time-display" class="select-capsule-text">4:00 PM</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                <select id="start-time-select" aria-label="选择开始时间">
+                  <option value="0">12:00 AM</option>
+                  <option value="1">1:00 AM</option>
+                  <option value="2">2:00 AM</option>
+                  <option value="3">3:00 AM</option>
+                  <option value="4">4:00 AM</option>
+                  <option value="5">5:00 AM</option>
+                  <option value="6">6:00 AM</option>
+                  <option value="7">7:00 AM</option>
+                  <option value="8">8:00 AM</option>
+                  <option value="9">9:00 AM</option>
+                  <option value="10">10:00 AM</option>
+                  <option value="11">11:00 AM</option>
+                  <option value="12">12:00 PM</option>
+                  <option value="13">1:00 PM</option>
+                  <option value="14">2:00 PM</option>
+                  <option value="15">3:00 PM</option>
+                  <option value="16" selected>4:00 PM</option>
+                  <option value="17">5:00 PM</option>
+                  <option value="18">6:00 PM</option>
+                  <option value="19">7:00 PM</option>
+                  <option value="20">8:00 PM</option>
+                  <option value="21">9:00 PM</option>
+                  <option value="22">10:00 PM</option>
+                  <option value="23">11:00 PM</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Row 2: 时长 -->
+            <div class="setting-row">
+              <span class="row-label">时长</span>
+              <div class="segmented-track" role="radiogroup" aria-label="活动时长">
+                <label class="segmented-opt" for="dur-1">
+                  <input type="radio" name="duration" id="dur-1" value="1">
+                  <span>1h</span>
+                </label>
+                <label class="segmented-opt active" for="dur-2">
+                  <input type="radio" name="duration" id="dur-2" value="2" checked>
+                  <span>2h</span>
+                </label>
+                <label class="segmented-opt" for="dur-3">
+                  <input type="radio" name="duration" id="dur-3" value="3">
+                  <span>3h</span>
+                </label>
+                <label class="segmented-opt" for="dur-4">
+                  <input type="radio" name="duration" id="dur-4" value="4">
+                  <span>4h</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Row 3: 场地数量 -->
+            <div class="setting-row">
+              <span class="row-label">场地数量</span>
+              <div class="segmented-track" role="radiogroup" aria-label="场地数量">
+                <label class="segmented-opt active" for="court-1">
+                  <input type="radio" name="court-count" id="court-1" value="1" checked>
+                  <span>1</span>
+                </label>
+                <label class="segmented-opt" for="court-2">
+                  <input type="radio" name="court-count" id="court-2" value="2">
+                  <span>2</span>
+                </label>
+                <label class="segmented-opt" for="court-3">
+                  <input type="radio" name="court-count" id="court-3" value="3">
+                  <span>3</span>
+                </label>
+                <label class="segmented-opt" for="court-4">
+                  <input type="radio" name="court-count" id="court-4" value="4">
+                  <span>4</span>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div id="court-fee-footnote" class="group-footnote">
+            场地费：早场 2h × 1片 = <strong>RM 29.68</strong>
+          </div>
+        </div>
+
+        <!-- 分组 2: 人数 -->
+        <div class="settings-group">
+          <div class="group-caption">人数</div>
+          <div class="group-card">
+            <!-- Row 1: 参与总人数 -->
+            <div class="setting-row">
+              <span class="row-label">参与总人数 (含 Host)</span>
+              <div class="stepper-group" role="spinbutton" aria-valuenow="6" aria-valuemin="1" aria-valuemax="40">
+                <button type="button" id="players-minus" class="btn-stepper" aria-label="减少总人数">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                </button>
+                <span id="players-display" class="stepper-num tabular-nums">6</span>
+                <button type="button" id="players-plus" class="btn-stepper" aria-label="增加总人数">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                </button>
+              </div>
+              <input type="hidden" id="total-players" value="6">
+            </div>
+
+            <!-- Row 2: Host 数量 -->
+            <div class="setting-row">
+              <span class="row-label">Host 数量 (免单)</span>
+              <div class="segmented-track" role="radiogroup" aria-label="Host 数量">
+                <label class="segmented-opt" for="host-0">
+                  <input type="radio" name="host-count" id="host-0" value="0">
+                  <span>0</span>
+                </label>
+                <label class="segmented-opt active" for="host-1">
+                  <input type="radio" name="host-count" id="host-1" value="1" checked>
+                  <span>1</span>
+                </label>
+                <label class="segmented-opt" for="host-2">
+                  <input type="radio" name="host-count" id="host-2" value="2">
+                  <span>2</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 分组 3: 用球 -->
+        <div class="settings-group">
+          <div class="group-caption">用球</div>
+          <div class="group-card">
+            <!-- Row 1: 用球数量 -->
+            <div class="setting-row">
+              <span class="row-label">用球数量</span>
+              <div class="stepper-group" role="spinbutton" aria-valuenow="3" aria-valuemin="0" aria-valuemax="30">
+                <button type="button" id="shuttles-minus" class="btn-stepper" aria-label="减少用球数量">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                </button>
+                <span id="shuttles-display" class="stepper-num tabular-nums">3</span>
+                <button type="button" id="shuttles-plus" class="btn-stepper" aria-label="增加用球数量">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                </button>
+              </div>
+              <input type="hidden" id="shuttles-used" value="3">
+            </div>
+
+            <!-- Row 2: 每桶价格 -->
+            <div class="setting-row" id="price-setting-row">
+              <span class="row-label">每桶价格</span>
+              <div class="price-input-capsule">
+                <span class="price-currency-prefix">RM</span>
+                <input type="number" id="shuttle-price" class="price-raw-input tabular-nums" value="123.00" min="0" step="0.01" inputmode="decimal" placeholder="0.00">
+              </div>
+            </div>
+
+            <!-- Row 3: 附加加球 (双行结构) -->
+            <div class="setting-row setting-row-tall">
+              <div class="row-label-col">
+                <span class="row-label">附加加球</span>
+                <span id="shuttle-subtitle" class="row-subtitle">无需加球覆盖 Host</span>
+              </div>
+              <div class="stepper-group" role="spinbutton" aria-valuenow="0" aria-valuemin="0" aria-valuemax="20">
+                <button type="button" id="add-shuttles-minus" class="btn-stepper" aria-label="减少附加球">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                </button>
+                <span id="add-shuttles-display" class="stepper-num tabular-nums">0</span>
+                <button type="button" id="add-shuttles-plus" class="btn-stepper" aria-label="增加附加球">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                </button>
+              </div>
+              <input type="hidden" id="additional-shuttles" value="0">
+            </div>
+          </div>
+        </div>
+
+        <!-- 错误提示 Banner -->
+        <div id="calc-error-notice" class="calc-error-notice hidden" role="alert">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          <span>参与总人数必须大于 Host 人数！</span>
+        </div>
+
+      </section>
+
+      <!-- ── Right Column: Dark Receipt Card (Hero Anchor) ── -->
+      <aside class="receipt-column">
+        <div class="receipt-card" aria-label="费用账单卡">
+          <!-- Receipt Header -->
+          <span class="receipt-header">每人收费</span>
+
+          <!-- 72px Hero Number -->
+          <div class="receipt-hero-row" aria-live="polite">
+            <span class="hero-currency">RM</span>
+            <span id="player-fee-display-desktop" class="hero-amount tabular-nums">0.00</span>
+          </div>
+
+          <!-- Context Pill -->
+          <div class="receipt-context-wrap">
+            <span id="context-pill-text" class="context-pill tabular-nums">6 人 · 2h · 1 片 · 3 球</span>
+          </div>
+
+          <!-- Receipt Perforation Notch & Dashed Line -->
+          <div class="receipt-perforation-divider" aria-hidden="true">
+            <div class="receipt-notch-left"></div>
+            <div class="receipt-dashed-line"></div>
+            <div class="receipt-notch-right"></div>
+          </div>
+
+          <!-- Financial Breakdown Rows -->
+          <div class="receipt-ledger">
+            <div class="receipt-ledger-row">
+              <span class="ledger-label">真实总成本</span>
+              <span id="total-cost-display" class="ledger-val tabular-nums">RM 0.00</span>
+            </div>
+            <div class="receipt-ledger-row">
+              <span class="ledger-label">总收款 (付费玩家)</span>
+              <span id="total-revenue-display" class="ledger-val tabular-nums">RM 0.00</span>
+            </div>
+            <div class="receipt-ledger-row">
+              <span class="ledger-label" id="net-profit-label">净利润</span>
+              <span id="net-profit-display" class="ledger-val tabular-nums profit-neutral">RM 0.00</span>
             </div>
           </div>
 
-        </div>
-      </div>
+          <!-- Foldable Shuttle Breakdown -->
+          <div class="receipt-shuttle-fold">
+            <div id="shuttle-fold-trigger" class="shuttle-fold-trigger" role="button" tabindex="0" aria-expanded="false" aria-label="展开用球统计">
+              <span>用球明细</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+            <div id="shuttle-fold-body" class="shuttle-fold-body">
+              <div class="shuttle-metric-tile">
+                <span class="metric-tile-title">真实用球</span>
+                <span id="sum-actual-shuttles" class="metric-tile-val tabular-nums">0 个</span>
+              </div>
+              <div class="shuttle-metric-tile">
+                <span class="metric-tile-title">额外加球</span>
+                <span id="sum-cover-shuttles" class="metric-tile-val tabular-nums">+0 个</span>
+              </div>
+              <div class="shuttle-metric-tile">
+                <span class="metric-tile-title">盈利球数</span>
+                <span id="sum-profit-shuttles" class="metric-tile-val tabular-nums">0 个</span>
+              </div>
+              <div class="shuttle-metric-tile">
+                <span class="metric-tile-title">计费球数</span>
+                <span id="sum-billed-shuttles" class="metric-tile-val tabular-nums">0 个</span>
+              </div>
+            </div>
+          </div>
 
-    </main>
+          <!-- Copy Button (White on Ink) -->
+          <button type="button" id="btn-copy-receipt" class="btn-copy-receipt">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span>复制账单明细</span>
+          </button>
+        </div>
+      </aside>
+
+    </div>
+  </main>
+
+  <!-- ── Mobile Bottom Sticky Dock (<1024px) ── -->
+  <aside class="mobile-sticky-dock" aria-label="移动端结算栏">
+    <div id="mobile-dock-info" class="mobile-dock-info" role="button" aria-label="展开账单明细">
+      <div class="dock-info-caption">
+        <span>每人收费</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+      </div>
+      <div id="player-fee-display-dock" class="dock-info-price tabular-nums">RM 0.00</div>
+    </div>
+    <button type="button" id="btn-copy-mobile-dock" class="btn-copy-mobile-dock">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+      </svg>
+      <span>复制</span>
+    </button>
+  </aside>
+
+  <!-- Mobile Bottom Drawer Sheet -->
+  <div id="mobile-drawer-sheet" class="mobile-drawer-sheet">
+    <div class="drawer-drag-handle"></div>
+    <div style="margin-bottom: 16px;">
+      <span id="context-pill-text-drawer" class="context-pill tabular-nums">6 人 · 2h · 1 片 · 3 球</span>
+    </div>
+    <div class="receipt-ledger" style="margin-bottom: 16px;">
+      <div class="receipt-ledger-row">
+        <span class="ledger-label">真实总成本</span>
+        <span id="total-cost-drawer" class="ledger-val tabular-nums">RM 0.00</span>
+      </div>
+      <div class="receipt-ledger-row">
+        <span class="ledger-label">总收款</span>
+        <span id="total-revenue-drawer" class="ledger-val tabular-nums">RM 0.00</span>
+      </div>
+      <div class="receipt-ledger-row">
+        <span class="ledger-label" id="net-profit-drawer-label">净利润</span>
+        <span id="net-profit-drawer" class="ledger-val tabular-nums">RM 0.00</span>
+      </div>
+    </div>
   </div>
 
-  <!-- Modal: 球场本地数据管理弹窗 -->
-  <div id="court-manage-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modal-manage-title">
-    <div class="modal-card">
-      <div class="modal-header">
+  <!-- ── Venue Management Modal (CSV offline support) ── -->
+  <div id="court-manage-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-manage-title">
+    <div class="modal-panel">
+      <div class="modal-top">
         <div>
-          <h3 class="modal-title" id="modal-manage-title">球场数据管理</h3>
-          <span class="db-status-badge">本地 CSV 格式存储 · 100% 离线</span>
+          <h3 class="modal-heading" id="modal-manage-title">球场数据管理</h3>
+          <span class="modal-subtext">本地 CSV 离线存储</span>
         </div>
-        <button type="button" class="modal-close-btn" id="modal-close-btn" aria-label="关闭弹窗">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <button type="button" class="modal-close-trigger" id="modal-close-btn" aria-label="关闭窗口">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
         </button>
       </div>
-      
-      <div class="modal-body">
+
+      <div class="modal-content">
         <!-- Form to Add/Edit Venue -->
-        <div class="manage-form-card">
-          <h4 id="venue-form-title">添加新球场</h4>
+        <div class="modal-form-card">
+          <h4 id="venue-form-title" style="font-size: var(--text-sub); font-weight: 600;">添加新球场</h4>
           <input type="hidden" id="venue-edit-id" value="">
-          
-          <div class="form-group">
+
+          <div class="modal-field">
             <label for="venue-name-input">球场名称</label>
-            <input type="text" id="venue-name-input" placeholder="例如: Lavana Sport Center Setapak" class="modal-input">
+            <input type="text" id="venue-name-input" placeholder="例如: Setapak Badminton Center" class="modal-text-input">
           </div>
-          
-          <div class="form-row-2col">
-            <div class="form-group">
+
+          <div class="modal-row-2col">
+            <div class="modal-field">
               <label for="venue-morning-input">早场单价 (RM/h)</label>
-              <input type="number" id="venue-morning-input" step="0.01" min="0" placeholder="14.84" class="modal-input">
+              <input type="number" id="venue-morning-input" step="0.01" min="0" placeholder="14.84" class="modal-text-input tabular-nums">
             </div>
-            <div class="form-group">
+            <div class="modal-field">
               <label for="venue-evening-input">晚场单价 (RM/h)</label>
-              <input type="number" id="venue-evening-input" step="0.01" min="0" placeholder="29.68" class="modal-input">
+              <input type="number" id="venue-evening-input" step="0.01" min="0" placeholder="29.68" class="modal-text-input tabular-nums">
             </div>
           </div>
-          
-          <div class="form-actions">
-            <button type="button" id="btn-save-venue" class="btn-primary-action">保存球场</button>
-            <button type="button" id="btn-cancel-venue-edit" class="btn-secondary-action hidden">取消编辑</button>
+
+          <div class="modal-btn-row">
+            <button type="button" id="btn-save-venue" class="btn-modal-primary">保存球场</button>
+            <button type="button" id="btn-cancel-venue-edit" class="btn-modal-secondary" style="display:none;">取消</button>
           </div>
         </div>
 
         <!-- Venue List Container -->
-        <div class="venues-list-container">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <h4>球场列表</h4>
-            <button type="button" id="btn-reset-venues-csv" class="btn-secondary-action" style="padding: 4px 10px; font-size: var(--text-xs); height: 28px;" title="重置为默认 CSV 场地">恢复默认 CSV</button>
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <h4 style="font-size: var(--text-sub); font-weight: 600;">已存球场列表</h4>
+            <button type="button" id="btn-reset-venues-csv" class="btn-venue-action" title="恢复默认 CSV 球场数据">重置为默认</button>
           </div>
           <div id="modal-venues-list" class="modal-venues-list">
-            <!-- 动态渲染数据 -->
+            <!-- Rendered by state.js -->
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Reusable Custom Bottom-Sheet Modal Drawer for Players & Shuttles Picker -->
-  <div id="drawer-overlay" class="drawer-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
-    <div class="drawer-sheet">
-      <div class="drawer-header">
-        <span id="drawer-title" class="drawer-title">选择选项</span>
-        <button type="button" id="drawer-close" class="drawer-close-btn" aria-label="关闭选择器">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
-        </button>
-      </div>
-      <div id="drawer-body" class="drawer-body"></div>
-    </div>
-  </div>
+  <!-- Global Toast Notice -->
+  <div id="global-toast" class="toast-notice" role="status" aria-live="polite"></div>
 
-  <!-- Core Scripts -->
-  <script src="js/core/theme.js"></script>
-  <script src="js/core/drawer.js"></script>
+  <!-- Scripts -->
   <script src="js/courtledger/calculator.js"></script>
   <script src="js/courtledger/state.js"></script>
   <script src="js/courtledger/ui.js"></script>

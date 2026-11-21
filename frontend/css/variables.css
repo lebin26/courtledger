@@ -1,143 +1,61 @@
 /* ==========================================================================
    COURT LEDGER — DESIGN SYSTEM TOKENS
-   Minimal, Flat, Clean, Production-Grade (Linear / Stripe / Apple Inspired)
+   Minimal, Restrained, High-Contrast "Receipt" Aesthetic
+   Inspired by Linear, Vercel, Apple Settings, Stripe Checkout
    ========================================================================== */
 
 :root {
-  /* ── Color Palette: Dark Theme (Default) ── */
-  --background: #09090b;
-  --surface: #121215;
-  --surface-hover: #18181c;
-  --surface-elevated: #1e1e24;
-  --surface-subtle: #141418;
+  /* ── 1. Color Palette ── */
+  --bg: #F5F5F3;              /* Warm light grey-white background */
+  --surface: #FFFFFF;         /* Pure white card surface */
+  --surface-hover: #FAFAF8;   /* Subtle row hover */
+  --ink: #0F0F10;             /* Pure ink black for primary actions & receipt card */
+  --text: #18181B;            /* Deep graphite body text */
+  --muted: #71717A;           /* Secondary text (WCAG AA compliant ≥ 4.5:1) */
+  --faint: #A1A1AA;           /* Placeholder & disabled state */
+  --line: #ECECE9;            /* 1px clean crisp divider */
+  --track: #F1F1EE;           /* Control wells & badge backgrounds */
 
-  --text-primary: #f4f4f5;
-  --text-secondary: #a1a1aa;
-  --text-muted: #71717a;
-  --placeholder: #52525b;
+  /* Semantic status colors */
+  --pos: #16A34A;             /* Positive / profit on light background */
+  --pos-dark: #4ADE80;        /* Positive / profit on dark receipt background */
+  --neg: #DC2626;             /* Negative / loss on light background */
+  --neg-dark: #F87171;        /* Negative / loss on dark receipt background */
 
-  --border-subtle: rgba(255, 255, 255, 0.06);
-  --border-default: rgba(255, 255, 255, 0.12);
-  --border-strong: rgba(255, 255, 255, 0.22);
-  --border-focus: #3b82f6;
+  /* ── 2. Shapes & Layering ── */
+  --r-card: 20px;             /* Group card corner radius */
+  --r-receipt: 24px;          /* Receipt card corner radius */
+  --r-control: 12px;          /* Segmented pill & input corner radius */
+  --r-pill: 999px;            /* Full capsule radius */
 
-  /* ── Primary Accent (Single semantic accent) ── */
-  --accent: #3b82f6;
-  --accent-hover: #2563eb;
-  --accent-muted: rgba(59, 130, 246, 0.12);
-  --accent-contrast: #ffffff;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 12px 32px -16px rgba(0, 0, 0, 0.10);
+  --shadow-receipt: 0 24px 48px -24px rgba(15, 15, 16, 0.28);
+  --shadow-mobile-bar: 0 -4px 20px rgba(0, 0, 0, 0.06);
 
-  /* ── Status Colors ── */
-  --success: #10b981;
-  --success-muted: rgba(16, 185, 129, 0.12);
-  --warning: #f59e0b;
-  --warning-muted: rgba(245, 158, 11, 0.12);
-  --danger: #ef4444;
-  --danger-muted: rgba(239, 68, 68, 0.12);
-
-  /* ── Typography Scale ── */
-  --font-sans: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  /* ── 3. Typography Scale (Strict 5 Tiers) ── */
+  --font-sans: Inter, "SF Pro Text", system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", sans-serif;
   --font-mono: ui-monospace, "SF Mono", "Fira Code", monospace;
 
-  --text-xs: 12px;
-  --text-sm: 14px;
-  --text-base: 15px;
-  --text-md: 16px;
-  --text-lg: 18px;
-  --text-xl: 22px;
-  --text-2xl: 28px;
-  --text-hero: 44px;
+  --text-hero: 72px;          /* Hero rate display */
+  --text-title: 20px;         /* Venue name & primary headers */
+  --text-body: 15px;          /* Standard row labels & inputs */
+  --text-sub: 13px;           /* Subtitles, group headers, footnotes */
+  --text-micro: 12px;         /* Micro tags & rates */
 
-  --weight-regular: 400;
-  --weight-medium: 500;
-  --weight-semibold: 600;
-  --weight-bold: 700;
-
-  --leading-tight: 1.2;
-  --leading-normal: 1.5;
-  --leading-relaxed: 1.6;
-
-  /* ── Spacing Scale (4px Base) ── */
+  /* ── 4. Spacing (8px Grid) ── */
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
   --space-4: 16px;
-  --space-5: 20px;
   --space-6: 24px;
   --space-8: 32px;
-  --space-10: 40px;
   --space-12: 48px;
-  --space-16: 64px;
 
-  /* ── Component Dimensions ── */
-  --control-height: 42px;
-  --control-height-sm: 34px;
-  --control-height-lg: 48px;
+  --row-height: 56px;
+  --row-height-tall: 64px;
 
-  /* ── Border Radii ── */
-  --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
-  --radius-full: 9999px;
-
-  /* ── Elevation & Shadows (Sparingly used, only for floating UI) ── */
-  --shadow-none: none;
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
-  --shadow-lg: 0 12px 28px rgba(0, 0, 0, 0.6);
-
-  /* ── Transitions & Motion ── */
-  --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
-  --transition-fast: 120ms var(--ease-standard);
-  --transition-normal: 180ms var(--ease-standard);
-  --transition-slow: 240ms var(--ease-standard);
-
-  /* ── Breakpoints (Reference) ── */
-  --breakpoint-mobile-sm: 360px;
-  --breakpoint-mobile: 390px;
-  --breakpoint-tablet: 768px;
-  --breakpoint-desktop: 1024px;
-  --breakpoint-wide: 1280px;
-
-  /* ── Backward Compatibility Aliases ── */
-  --transition: var(--transition-normal);
-  --color-bullish: var(--success);
-  --color-bearish: var(--danger);
-  --color-text-muted: var(--text-muted);
-}
-
-/* ── Color Palette: Light Theme ── */
-html[data-theme="light"] {
-  --background: #f8fafc;
-  --surface: #ffffff;
-  --surface-hover: #f1f5f9;
-  --surface-elevated: #ffffff;
-  --surface-subtle: #f8fafc;
-
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --text-muted: #94a3b8;
-  --placeholder: #94a3b8;
-
-  --border-subtle: rgba(0, 0, 0, 0.06);
-  --border-default: rgba(0, 0, 0, 0.12);
-  --border-strong: rgba(0, 0, 0, 0.22);
-  --border-focus: #2563eb;
-
-  --accent: #2563eb;
-  --accent-hover: #1d4ed8;
-  --accent-muted: rgba(37, 99, 235, 0.08);
-  --accent-contrast: #ffffff;
-
-  --success: #059669;
-  --success-muted: rgba(5, 150, 105, 0.08);
-  --warning: #d97706;
-  --warning-muted: rgba(217, 119, 6, 0.08);
-  --danger: #dc2626;
-  --danger-muted: rgba(220, 38, 38, 0.08);
-
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 12px 28px rgba(0, 0, 0, 0.12);
+  /* ── 5. Motion ── */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-fast: 150ms var(--ease);
+  --transition-normal: 200ms var(--ease);
 }

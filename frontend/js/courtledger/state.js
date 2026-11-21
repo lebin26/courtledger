@@ -84,7 +84,19 @@ TARUMT Sport Complex,0.00,0.00`;
     rateEvening = rates.rateEvening;
     const venueRateBadge = document.getElementById('venue-rate-badge');
     if (venueRateBadge) {
-      venueRateBadge.textContent = `🌞 RM ${rateMorning.toFixed(2)} / 🌙 RM ${rateEvening.toFixed(2)}`;
+      venueRateBadge.textContent = `早场 RM ${rateMorning.toFixed(2)} / 晚场 RM ${rateEvening.toFixed(2)}`;
+    }
+    const venueNameDisplay = document.getElementById('venue-name-display');
+    if (venueNameDisplay) {
+      venueNameDisplay.textContent = rates.venueName;
+    }
+    const morningEl = document.getElementById('venue-morning-rate');
+    if (morningEl) {
+      morningEl.textContent = rateMorning.toFixed(2);
+    }
+    const eveningEl = document.getElementById('venue-evening-rate');
+    if (eveningEl) {
+      eveningEl.textContent = rateEvening.toFixed(2);
     }
     if (typeof onVenueChangeCallback === 'function') {
       onVenueChangeCallback();
