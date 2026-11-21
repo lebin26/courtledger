@@ -378,15 +378,6 @@
               </div>
             </div>
           </div>
-
-          <!-- Copy Button (White on Ink) -->
-          <button type="button" id="btn-copy-receipt" class="btn-copy-receipt">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-            </svg>
-            <span>复制账单明细</span>
-          </button>
         </div>
       </aside>
 
@@ -394,23 +385,19 @@
   </main>
 
   <!-- ── Mobile Bottom Sticky Dock (<1024px) ── -->
-  <aside class="mobile-sticky-dock" aria-label="移动端结算栏">
-    <div id="mobile-dock-info" class="mobile-dock-info" role="button" aria-label="展开账单明细">
+  <aside class="mobile-sticky-dock" id="mobile-sticky-dock" aria-label="移动端结算栏" role="button" tabindex="0">
+    <div id="mobile-dock-info" class="mobile-dock-info">
       <div class="dock-info-caption">
         <span>每人收费</span>
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="18 15 12 9 6 15"></polyline>
-        </svg>
       </div>
       <div id="player-fee-display-dock" class="dock-info-price tabular-nums">RM 0.00</div>
     </div>
-    <button type="button" id="btn-copy-mobile-dock" class="btn-copy-mobile-dock">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+    <div class="dock-view-detail-hint">
+      <span>查看明细</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="18 15 12 9 6 15"></polyline>
       </svg>
-      <span>复制</span>
-    </button>
+    </div>
   </aside>
 
   <!-- Mobile Bottom Drawer Sheet -->

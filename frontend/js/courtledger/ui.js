@@ -260,13 +260,10 @@
 
     const calcErrorNotice = document.getElementById('calc-error-notice');
 
-    const btnCopyReceipt = document.getElementById('btn-copy-receipt');
-    const btnCopyDock = document.getElementById('btn-copy-mobile-dock');
-
     const shuttleFoldTrigger = document.getElementById('shuttle-fold-trigger');
     const shuttleFoldBody = document.getElementById('shuttle-fold-body');
 
-    const mobileDockInfo = document.getElementById('mobile-dock-info');
+    const mobileStickyDock = document.getElementById('mobile-sticky-dock');
     const mobileDrawerSheet = document.getElementById('mobile-drawer-sheet');
 
     // ── Setup Steppers with Continuous Long Press ──
@@ -383,14 +380,14 @@
     }
 
     // Mobile Bottom Sheet toggle
-    if (mobileDockInfo && mobileDrawerSheet) {
-      mobileDockInfo.addEventListener('click', () => {
+    if (mobileStickyDock && mobileDrawerSheet) {
+      mobileStickyDock.addEventListener('click', () => {
         mobileDrawerSheet.classList.toggle('open');
       });
 
       // Click outside to close drawer
       document.addEventListener('click', (e) => {
-        if (!mobileDrawerSheet.contains(e.target) && !mobileDockInfo.contains(e.target)) {
+        if (!mobileDrawerSheet.contains(e.target) && !mobileStickyDock.contains(e.target)) {
           mobileDrawerSheet.classList.remove('open');
         }
       });
@@ -595,67 +592,6 @@
       }
 
       saveUserInputs();
-    }
-
-    // ── Copy Bill Handler ──
-    function handleCopyBill(buttonElement) {
-      if (!latestCalcData || !latestCalcData.calcResult.isValid) {
-        if (window.showToast) window.showToast('计算参数有误，无法生成账单');
-        return;
-      }
-      const d = latestCalcData;
-      const res = d.calcResult;
-
-      const now = new Date();
-      const days = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
-      const dateStr = `${now.getMonth() + 1}/${now.getDate()} ${days[now.getDay()]}`;
-      const hostPart = d.hostCount > 0 ? `（含 ${d.hostCount} Host 免单）` : '';
-      const billText = [
-        `🏸 羽毛球 · ${dateStr}`,
-        `📍 ${d.venueName}`,
-        `⏰ ${d.startStr} – ${d.endStr}（${d.duration}h · ${d.courtCount} 片）`,
-        `👥 ${d.totalPlayers} 人${hostPart}`,
-        `💸 每人 RM ${res.playerFee.toFixed(2)}`
-      ].join('\n');
-
-      const originalHTML = buttonElement ? buttonElement.innerHTML : '';
-
-      function triggerFeedback() {
-        if (buttonElement) {
-          buttonElement.innerHTML = `<span>已复制 ✓</span>`;
-          setTimeout(() => {
-            buttonElement.innerHTML = originalHTML;
-          }, 1500);
-        }
-      }
-
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(billText).then(triggerFeedback).catch(() => {
-          fallbackCopy(billText);
-          triggerFeedback();
-        });
-      } else {
-        fallbackCopy(billText);
-        triggerFeedback();
-      }
-    }
-
-    function fallbackCopy(text) {
-      const ta = document.createElement('textarea');
-      ta.value = text;
-      ta.style.position = 'fixed';
-      ta.style.opacity = '0';
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand('copy');
-      document.body.removeChild(ta);
-    }
-
-    if (btnCopyReceipt) {
-      btnCopyReceipt.addEventListener('click', () => handleCopyBill(btnCopyReceipt));
-    }
-    if (btnCopyDock) {
-      btnCopyDock.addEventListener('click', () => handleCopyBill(btnCopyDock));
     }
 
     // Initialize Local Venue Modal

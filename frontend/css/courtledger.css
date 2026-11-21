@@ -593,8 +593,8 @@
 /* ── Foldable Shuttle Breakdown ── */
 .receipt-shuttle-fold {
   border-top: 1px solid rgba(255, 255, 255, 0.10);
-  padding: 10px 0;
-  margin-bottom: 20px;
+  padding: 10px 0 0;
+  margin-bottom: 0;
 }
 
 .shuttle-fold-trigger {
@@ -651,36 +651,7 @@
   color: #FFFFFF;
 }
 
-/* ── Copy Bill Action Button ── */
-.btn-copy-receipt {
-  width: 100%;
-  height: 52px;
-  background: #FFFFFF;
-  color: var(--ink);
-  border-radius: var(--r-control);
-  font-size: var(--text-body);
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-2);
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-  transition: background-color var(--transition-fast), transform var(--transition-fast), opacity var(--transition-fast);
-}
 
-.btn-copy-receipt:hover {
-  background-color: #F4F4F5;
-}
-
-.btn-copy-receipt:active {
-  transform: scale(0.98);
-}
-
-.btn-copy-receipt:focus-visible {
-  outline: 2px solid #FFFFFF;
-  outline-offset: 3px;
-}
 
 /* ── Error Callout Banner ── */
 .calc-error-notice {
@@ -716,6 +687,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  cursor: pointer;
 }
 
 @media (min-width: 1024px) {
@@ -727,7 +699,6 @@
 .mobile-dock-info {
   display: flex;
   flex-direction: column;
-  cursor: pointer;
 }
 
 .dock-info-caption {
@@ -739,10 +710,6 @@
   gap: 4px;
 }
 
-.dock-info-caption svg {
-  color: var(--muted);
-}
-
 .dock-info-price {
   font-size: 24px;
   font-weight: 600;
@@ -751,23 +718,27 @@
   letter-spacing: -0.02em;
 }
 
-.btn-copy-mobile-dock {
-  height: 44px;
-  background: var(--ink);
-  color: #FFFFFF;
-  border-radius: var(--r-control);
-  padding: 0 20px;
-  font-size: 14px;
-  font-weight: 600;
+.dock-view-detail-hint {
   display: flex;
   align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  transition: opacity var(--transition-fast), transform var(--transition-fast);
+  gap: 4px;
+  font-size: var(--text-sub);
+  color: var(--muted);
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: var(--r-control);
+  background: var(--track);
+  transition: background-color var(--transition-fast), color var(--transition-fast);
 }
 
-.btn-copy-mobile-dock:active {
-  transform: scale(0.97);
+.dock-view-detail-hint svg {
+  color: var(--muted);
+  transition: transform var(--transition-normal);
+}
+
+.mobile-sticky-dock:hover .dock-view-detail-hint {
+  color: var(--text);
+  background-color: #E8E8E4;
 }
 
 /* Mobile Bottom Sheet Drawer for Financial Details */

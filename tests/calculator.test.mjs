@@ -33,21 +33,27 @@ function calculateCourtFee(startHour, duration, rateMorning, rateEvening, courtC
   };
 }
 
+function roundCurrency(val) {
+  return Math.round((val + Number.EPSILON) * 100) / 100;
+}
+
 function calculateRequiredHostShuttles(courtFee, shuttlesUsed, shuttlePrice, totalPlayers, hostCount) {
   if (hostCount <= 0 || totalPlayers <= hostCount || shuttlePrice <= 0) {
     return 0;
   }
   const singleShuttlePrice = shuttlePrice / 12;
-  const actualShuttleCost = shuttlesUsed * singleShuttlePrice;
-  const actualTotalCost = courtFee + actualShuttleCost;
+  const actualShuttleCost = roundCurrency(shuttlesUsed * singleShuttlePrice);
+  const actualTotalCost = roundCurrency(courtFee + actualShuttleCost);
   const payingPlayers = totalPlayers - hostCount;
 
   let k = 0;
   while (k <= 100) {
     const billedShuttles = shuttlesUsed + k;
-    const billedTotalCost = courtFee + (billedShuttles * singleShuttlePrice);
-    const playerFee = billedTotalCost / totalPlayers;
-    const totalRevenue = playerFee * payingPlayers;
+    const billedShuttleCost = roundCurrency(billedShuttles * singleShuttlePrice);
+    const billedTotalCost = roundCurrency(courtFee + billedShuttleCost);
+    const rawPlayerFee = billedTotalCost / totalPlayers;
+    const playerFee = roundCurrency(rawPlayerFee);
+    const totalRevenue = roundCurrency(playerFee * payingPlayers);
 
     if (totalRevenue >= actualTotalCost - 0.0001) {
       return k;
@@ -59,11 +65,11 @@ function calculateRequiredHostShuttles(courtFee, shuttlesUsed, shuttlePrice, tot
 
 function computeFeeAndBreakdown(courtFee, shuttlesUsed, shuttlePrice, totalPlayers, hostCount, additionalShuttles) {
   const singleShuttlePrice = shuttlePrice > 0 ? (shuttlePrice / 12) : 0;
-  const actualShuttleCost = shuttlesUsed * singleShuttlePrice;
-  const actualTotalCost = courtFee + actualShuttleCost;
+  const actualShuttleCost = roundCurrency(shuttlesUsed * singleShuttlePrice);
+  const actualTotalCost = roundCurrency(courtFee + actualShuttleCost);
   const billedShuttles = shuttlesUsed + additionalShuttles;
-  const billedShuttleCost = billedShuttles * singleShuttlePrice;
-  const billedTotalCost = courtFee + billedShuttleCost;
+  const billedShuttleCost = roundCurrency(billedShuttles * singleShuttlePrice);
+  const billedTotalCost = roundCurrency(courtFee + billedShuttleCost);
   const payingPlayers = totalPlayers - hostCount;
 
   const requiredHostShuttles = calculateRequiredHostShuttles(
@@ -87,14 +93,16 @@ function computeFeeAndBreakdown(courtFee, shuttlesUsed, shuttlePrice, totalPlaye
   let totalRevenue = 0;
 
   if (singleShuttlePrice > 0) {
-    playerFee = billedTotalCost / totalPlayers;
-    totalRevenue = playerFee * payingPlayers;
+    const rawFee = billedTotalCost / totalPlayers;
+    playerFee = roundCurrency(rawFee);
+    totalRevenue = roundCurrency(playerFee * payingPlayers);
   } else {
-    playerFee = actualTotalCost / payingPlayers;
-    totalRevenue = playerFee * payingPlayers;
+    const rawFee = actualTotalCost / payingPlayers;
+    playerFee = roundCurrency(rawFee);
+    totalRevenue = roundCurrency(playerFee * payingPlayers);
   }
 
-  let netProfit = totalRevenue - actualTotalCost;
+  let netProfit = roundCurrency(totalRevenue - actualTotalCost);
   if (Math.abs(netProfit) < 0.005) {
     netProfit = 0;
   }
@@ -182,6 +190,20 @@ test('computeFeeAndBreakdown - complete AA calculation breakdown', () => {
   assert.equal(breakdown.payingPlayers, 6);
   assert.equal(Math.round(breakdown.actualTotalCost * 100) / 100, 90.11);
   assert.equal(Math.round(breakdown.playerFee * 100) / 100, 15.02);
+});
+
+test('computeFeeAndBreakdown - 7 players, 1 host, rounded totalRevenue matches playerFee * payingPlayers', () => {
+  // 7 players, 1 host (6 paying), courtFee RM 29.68, 3 shuttles @ RM 123/tube
+  // Total cost: 29.68 + 30.75 = 60.43
+  // Raw fee: 60.43 / 7 = 8.632857... -> rounded to 8.63
+  // 6 paying players: 6 * 8.63 = 51.78
+  const breakdown = computeFeeAndBreakdown(29.68, 3, 123.0, 7, 1, 0);
+  assert.equal(breakdown.isValid, true);
+  assert.equal(breakdown.payingPlayers, 6);
+  assert.equal(breakdown.playerFee, 8.63);
+  assert.equal(breakdown.totalRevenue, 51.78);
+  assert.equal(roundCurrency(breakdown.playerFee * breakdown.payingPlayers), 51.78);
+  assert.equal(breakdown.netProfit, -8.65);
 });
 
 test('parseCSV - successfully parses venues.csv file', () => {

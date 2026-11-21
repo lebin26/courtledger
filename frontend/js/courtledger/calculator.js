@@ -5,7 +5,12 @@
 
 (function () {
   function formatCurrency(val) {
+    if (typeof val !== 'number' || isNaN(val)) return '0.00';
     return val.toFixed(2);
+  }
+
+  function roundCurrency(val) {
+    return Math.round((val + Number.EPSILON) * 100) / 100;
   }
 
   function format12Hour(hour) {
@@ -50,16 +55,18 @@
       return 0;
     }
     const singleShuttlePrice = shuttlePrice / 12;
-    const actualShuttleCost = shuttlesUsed * singleShuttlePrice;
-    const actualTotalCost = courtFee + actualShuttleCost;
+    const actualShuttleCost = roundCurrency(shuttlesUsed * singleShuttlePrice);
+    const actualTotalCost = roundCurrency(courtFee + actualShuttleCost);
     const payingPlayers = totalPlayers - hostCount;
 
     let k = 0;
     while (k <= 100) {
       const billedShuttles = shuttlesUsed + k;
-      const billedTotalCost = courtFee + (billedShuttles * singleShuttlePrice);
-      const playerFee = billedTotalCost / totalPlayers;
-      const totalRevenue = playerFee * payingPlayers;
+      const billedShuttleCost = roundCurrency(billedShuttles * singleShuttlePrice);
+      const billedTotalCost = roundCurrency(courtFee + billedShuttleCost);
+      const rawPlayerFee = billedTotalCost / totalPlayers;
+      const playerFee = roundCurrency(rawPlayerFee);
+      const totalRevenue = roundCurrency(playerFee * payingPlayers);
 
       if (totalRevenue >= actualTotalCost - 0.0001) {
         return k;
@@ -71,11 +78,11 @@
 
   function computeFeeAndBreakdown(courtFee, shuttlesUsed, shuttlePrice, totalPlayers, hostCount, additionalShuttles) {
     const singleShuttlePrice = shuttlePrice > 0 ? (shuttlePrice / 12) : 0;
-    const actualShuttleCost = shuttlesUsed * singleShuttlePrice;
-    const actualTotalCost = courtFee + actualShuttleCost;
+    const actualShuttleCost = roundCurrency(shuttlesUsed * singleShuttlePrice);
+    const actualTotalCost = roundCurrency(courtFee + actualShuttleCost);
     const billedShuttles = shuttlesUsed + additionalShuttles;
-    const billedShuttleCost = billedShuttles * singleShuttlePrice;
-    const billedTotalCost = courtFee + billedShuttleCost;
+    const billedShuttleCost = roundCurrency(billedShuttles * singleShuttlePrice);
+    const billedTotalCost = roundCurrency(courtFee + billedShuttleCost);
     const payingPlayers = totalPlayers - hostCount;
 
     const requiredHostShuttles = calculateRequiredHostShuttles(
@@ -107,14 +114,16 @@
     let totalRevenue = 0;
 
     if (singleShuttlePrice > 0) {
-      playerFee = billedTotalCost / totalPlayers;
-      totalRevenue = playerFee * payingPlayers;
+      const rawFee = billedTotalCost / totalPlayers;
+      playerFee = roundCurrency(rawFee);
+      totalRevenue = roundCurrency(playerFee * payingPlayers);
     } else {
-      playerFee = actualTotalCost / payingPlayers;
-      totalRevenue = playerFee * payingPlayers;
+      const rawFee = actualTotalCost / payingPlayers;
+      playerFee = roundCurrency(rawFee);
+      totalRevenue = roundCurrency(playerFee * payingPlayers);
     }
 
-    let netProfit = totalRevenue - actualTotalCost;
+    let netProfit = roundCurrency(totalRevenue - actualTotalCost);
     if (Math.abs(netProfit) < 0.005) {
       netProfit = 0;
     }
@@ -140,6 +149,7 @@
   window.CourtLedgerCalc = {
     formatCurrency,
     format12Hour,
+    roundCurrency,
     calculateCourtFee,
     computeCourtFee: calculateCourtFee,
     calculateRequiredHostShuttles,
