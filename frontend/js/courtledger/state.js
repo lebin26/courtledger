@@ -7,7 +7,8 @@
   const DEFAULT_CSV = `场地名称,早场价格(RM/h),晚场价格(RM/h)
 Lavana Sport Center Setapak,14.84,29.68
 Setapak Badminton Center (SBC),14.00,28.00
-TARUMT Sport Complex,0.00,0.00`;
+TARUMT Sport Complex,0.00,0.00
+DBKL Court,8.00,8.00`;
 
   const LOCAL_VENUES_KEY = 'courtledger_offline_venues';
 
@@ -126,20 +127,26 @@ TARUMT Sport Complex,0.00,0.00`;
 
   async function loadVenuesFromCSVFile() {
     try {
-      // If user hasn't explicitly customized yet, attempt to fetch venues.csv
-      if (!localStorage.getItem(LOCAL_VENUES_KEY)) {
-        const response = await fetch('venues.csv');
-        if (response.ok) {
-          const csvText = await response.text();
-          const parsed = parseCSV(csvText);
-          if (parsed.length > 0) {
-            venues = parsed;
-            saveCachedVenues(venues);
-          }
+      // Fetch latest venues.csv (with cache-busting)
+      const response = await fetch('venues.csv?t=' + Date.now());
+      if (response.ok) {
+        const csvText = await response.text();
+        const parsed = parseCSV(csvText);
+        if (parsed.length > 0) {
+          const cached = getCachedVenues();
+          // Merge: ensure all venues in venues.csv exist in current list
+          parsed.forEach(pv => {
+            const exists = cached.some(cv => cv.name === pv.name);
+            if (!exists) {
+              cached.push(pv);
+            }
+          });
+          venues = cached;
+          saveCachedVenues(venues);
         }
       }
     } catch (e) {
-      // Offline file protocol or network error; fallback to cached or DEFAULT_CSV
+      // Offline fallback
       console.log('venues.csv fetch skipped/offline fallback active');
     }
     populateVenueSelect();
